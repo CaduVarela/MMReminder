@@ -1,6 +1,5 @@
-import { Router } from 'express'
+import { RequestHandler, Router } from 'express'
 import { z } from 'zod'
-import validator from 'validator'
 
 import { zodValidate } from '../utils/zodValidate'
 import { nedbCreate, nedbDelete, nedbFindMany, nedbFindOne, nedbUpdate } from '../utils/factoriesRoute'
@@ -11,36 +10,26 @@ const route = Router()
 const zodSchemaCreate = z.object({
   body: z.object({
     name: z.string(),
-    email: z.string().email(),
-
-    // Only accepts pt-BR phone numbers
-    phone: z.string().refine(
-      (value) => validator.isMobilePhone(value, 'pt-BR'),
-      {
-        message: "Invalid phone number",
-        path: ["phone"]
-      }
-    ).optional()
+    member: z.string().min(16).max(16).array()
   }).strict()
 })
 
 const zodSchemaUpdate = z.object({
   body: z.object({
     name: z.string().optional(),
-    email: z.string().email().optional(),
 
-    // Only accepts pt-BR phone numbers
-    phone: z.string().refine(
-      (value) => validator.isMobilePhone(value, 'pt-BR'),
-      {
-        message: "Invalid phone number",
-        path: ["phone"]
-      }
-    ).optional()
+    $add: z.object({
+      member: z.string().min(16).max(16)
+    }).strict().optional(),
+    
+    $remove: z.object({
+      member: z.string().min(16).max(16)
+    }).strict().optional(),
+    
   }).strict()
 })
 
-const targetDatabase = "person"
+const targetDatabase = "team"
 
 route.post('/',
   zodValidate(zodSchemaCreate),

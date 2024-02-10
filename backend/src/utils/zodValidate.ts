@@ -15,6 +15,8 @@ export function zodValidate(zodSchema: ZodSchema<any>): RequestHandler {
         res.status(400).json(err.issues)
         return
       }
+      res.status(400).json(err.issues)
+      return
     }
   }
 }

@@ -6,10 +6,10 @@ export function nedbCreate(targetDatabase: string): RequestHandler {
   return (req, res) => {
     try {
       const data = req.body
-      
+
       database[targetDatabase as keyof typeof database].loadDatabase()
 
-      database.person.insert(data, (err, doc) => {
+      database[targetDatabase as keyof typeof database].insert(data, (err, doc) => {
         if (err) {
           res.status(500).json(err)
         }
@@ -31,7 +31,7 @@ export function nedbCreate(targetDatabase: string): RequestHandler {
 export function nedbFindMany(targetDatabase: string, findOptions: Object = {}): RequestHandler {
   return (req, res) => {
     try {
-      
+
       database[targetDatabase as keyof typeof database].loadDatabase()
 
       database[targetDatabase as keyof typeof database].find({ ...findOptions }, (err: any, docs: any) => {
@@ -52,7 +52,7 @@ export function nedbFindOne(targetDatabase: string, findOptions: Object = {}): R
   return (req, res) => {
     try {
       const _id = req.params.id
-      
+
       database[targetDatabase as keyof typeof database].loadDatabase()
 
       database[targetDatabase as keyof typeof database].findOne({ _id }, (err, docs) => {
@@ -111,12 +111,38 @@ export function nedbUpdate(targetDatabase: string): RequestHandler {
     try {
       const data = req.body
       const _id = req.params.id
-      
+
       database[targetDatabase as keyof typeof database].loadDatabase()
 
-      database.person.update({ _id }, { $set: data  }, {}, (err, doc) => {
+      let push
+      if (data.$add) {
+        push = data.$add
+        delete data.$add
+      }
+
+      let pull
+      if (data.$remove) {
+        pull = data.$remove
+        delete data.$remove
+      }
+
+      const updateArguments = {
+        $set: data,
+        $push: push,
+        $pull: pull
+      }
+      
+      database[targetDatabase as keyof typeof database].update({ _id }, updateArguments, {}, (err, doc) => {
         if (err) {
           res.status(500).json(err)
+          return
+        }
+
+        if (doc < 1) {
+          res.status(400).json({
+            detail: "Entity not found"
+          })
+          return
         }
 
         res.status(200).json({

@@ -1,19 +1,19 @@
 import Datastore from 'nedb'
 
-export type Person = {
-  _id?: string,
+// export type Person = {
+//   _id?: string,
 
-  name: string,
-  email: string,
-  phone?: number
-}
+//   name: string,
+//   email: string,
+//   phone?: number
+// }
 
-export type Team = {
-  _id?: string,
+// export type Team = {
+//   _id?: string,
 
-  name: string,
-  member: Person[]
-}
+//   name: string,
+//   member: Person[]
+// }
 
 //
 const database = {
