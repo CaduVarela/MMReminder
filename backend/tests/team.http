@@ -2,8 +2,7 @@ POST http://localhost:3000/api/team HTTP/1.1
 content-type: application/json
 
 {
-  "name": "Team Test",
-  "member": [ "1hFyzCcAJkgupLMs", "NuX3vyAV7VLztbUI" ]
+  "name": "New Team"
 }
 
 #####
@@ -11,7 +10,7 @@ GET http://localhost:3000/api/team HTTP/1.1
 content-type: application/json
 
 ###### 
-@target = 9GFoTQ9b4WiiPUqR
+@target = 2
 
 GET http://localhost:3000/api/team/{{target}} HTTP/1.1
 content-type: application/json
@@ -26,10 +25,8 @@ content-type: application/json
 
 {
   "name": "teste",
-  "$add": {
-    "member": "XQsxjn6UfsQlMVQu"
-  },
-  "$remove": {
-    "member": "1hFyzCcAJkgupLMs" 
+  
+  "$connect": {
+    "person": [ 1 ]
   }
 }

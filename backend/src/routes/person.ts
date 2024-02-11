@@ -3,7 +3,11 @@ import { z } from 'zod'
 import validator from 'validator'
 
 import { zodValidate } from '../utils/zodValidate'
-import { nedbCreate, nedbDelete, nedbFindMany, nedbFindOne, nedbUpdate } from '../utils/factoriesRoute'
+import { prismaCreate, prismaDelete, prismaFindMany, prismaFindUnique, prismaUpdate } from '../utils/factoriesRoute'
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
+const model = prisma.person
 
 const route = Router()
 
@@ -20,7 +24,11 @@ const zodSchemaCreate = z.object({
         message: "Invalid phone number",
         path: ["phone"]
       }
-    ).optional()
+    ).optional(),
+
+    $connect: z.object({
+      team: z.number().optional()
+    }).strict().optional()
   }).strict()
 })
 
@@ -36,27 +44,33 @@ const zodSchemaUpdate = z.object({
         message: "Invalid phone number",
         path: ["phone"]
       }
-    ).optional()
+    ).optional(),
+
+    $connect: z.object({
+      team: z.number().optional().array()
+    }).strict().optional(),
+
+    $disconnect: z.object({
+      team: z.number().optional().array()
+    }).strict().optional()
   }).strict()
 })
 
-const targetDatabase = "person"
-
 route.post('/',
   zodValidate(zodSchemaCreate),
-  nedbCreate(targetDatabase))
+  prismaCreate(model))
 
 route.get('/',
-  nedbFindMany(targetDatabase))
+  prismaFindMany(model))
 
 route.get('/:id',
-  nedbFindOne(targetDatabase))
+  prismaFindUnique(model))
 
 route.put('/:id',
   zodValidate(zodSchemaUpdate),
-  nedbUpdate(targetDatabase))
+  prismaUpdate(model))
 
 route.delete('/:id',
-  nedbDelete(targetDatabase))
+  prismaDelete(model))
 
 export default route

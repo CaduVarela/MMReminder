@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Person {
+  id        Int          @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String?
+  team      Team[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model Team {
+  id        Int          @id @default(autoincrement())
+  name      String
+  person    Person[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+// model TeamPerson {
+//   id        Int      @id @default(autoincrement())
+//   Person    Person   @relation(fields: [personId], references: [id])
+//   personId  Int
+//   Team      Team     @relation(fields: [teamId], references: [id])
+//   teamId    Int
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }

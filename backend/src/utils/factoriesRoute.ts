@@ -1,160 +1,268 @@
-import { RequestHandler } from "express"
-import { database } from "../database"
-import Nedb from "nedb"
+import { RequestHandler } from "express";
+import { ZodSchema, z } from "zod";
 
-export function nedbCreate(targetDatabase: string): RequestHandler {
-  return (req, res) => {
+export function zodValidate(zodSchema: ZodSchema<any>): RequestHandler {
+  return (req, res, next) => {
+    try {
+      const data = zodSchema.parse({
+        body: req.body,
+        params: req.params,
+        query: req.query,
+      })
+      next()
+    } catch (err: any) {
+      if (err instanceof z.ZodError) {
+        res.status(400).json(err.issues)
+        return
+      }
+
+    }
+  }
+}
+
+export function prismaCreate(model: any): RequestHandler {
+  return async (req, res) => {
     try {
       const data = req.body
 
-      database[targetDatabase as keyof typeof database].loadDatabase()
-
-      database[targetDatabase as keyof typeof database].insert(data, (err, doc) => {
-        if (err) {
-          res.status(500).json(err)
-        }
-
-        res.status(200).json({
-          detail: "Registered successfully"
+      if (data["$connect"]) {
+        Object.entries(data["$connect"]).forEach(([key, value]) => {
+          if (Array.isArray(value)) {
+            data[key] = {
+              connect: value.map((id) => ({ id }))
+            }
+          } else {
+            data[key] = {
+              connect: { id: value }
+            }
+          }
         })
-      })
-    } catch (err) {
-      if (err instanceof Nedb) {
-        res.status(500).json(err)
-        return
       }
-      res.status(500).json(err)
-    }
-  };
-}
 
-export function nedbFindMany(targetDatabase: string, findOptions: Object = {}): RequestHandler {
-  return (req, res) => {
-    try {
+      delete data["$connect"]
 
-      database[targetDatabase as keyof typeof database].loadDatabase()
+      const Create = model.create.bind(model)
 
-      database[targetDatabase as keyof typeof database].find({ ...findOptions }, (err: any, docs: any) => {
-        res.status(200).json(docs)
-      })
-
-    } catch (err) {
-      if (err instanceof Nedb) {
-        res.status(500).json(err)
-        return
-      }
-      res.status(500).json(err)
-    }
-  };
-}
-
-export function nedbFindOne(targetDatabase: string, findOptions: Object = {}): RequestHandler {
-  return (req, res) => {
-    try {
-      const _id = req.params.id
-
-      database[targetDatabase as keyof typeof database].loadDatabase()
-
-      database[targetDatabase as keyof typeof database].findOne({ _id }, (err, docs) => {
-        if (docs === null) {
-          res.status(400).json({
-            detail: 'Entity not found'
-          })
-          return
-        }
-        res.status(200).json(docs)
+      const response = await Create({ data })
+      res.status(200).json({
+        "detail": "Registered successfully"
       })
 
     } catch (err: any) {
-      if (err instanceof Nedb) {
-        res.status(500).json(err)
-        return
-      }
 
-      res.status(500).send(err)
+      console.error(err)
+      res.status(400).json({ ...err })
     }
-  };
+  }
 }
 
-export function nedbDelete(targetDatabase: string): RequestHandler {
-  return (req, res) => {
-    try {
-      const _id = req.params.id
-
-      database[targetDatabase as keyof typeof database].loadDatabase()
-
-      database[targetDatabase as keyof typeof database].remove({ _id }, {}, (err, docs) => {
-        if (docs === 0) {
-          res.status(400).json({
-            detail: 'Entity not found'
-          })
-          return
-        }
-        res.status(200).json({
-          detail: 'Entity deleted'
-        })
-      })
-
-    } catch (err: any) {
-      if (err instanceof Nedb) {
-        res.status(500).json(err)
-        return
-      }
-
-      res.status(500).send(err)
-    }
-  };
-}
-
-export function nedbUpdate(targetDatabase: string): RequestHandler {
-  return (req, res) => {
+export function prismaUpdate(model: any): RequestHandler {
+  return async (req, res) => {
     try {
       const data = req.body
-      const _id = req.params.id
+      const id = Number(req.params.id)
 
-      database[targetDatabase as keyof typeof database].loadDatabase()
-
-      let push
-      if (data.$add) {
-        push = data.$add
-        delete data.$add
-      }
-
-      let pull
-      if (data.$remove) {
-        pull = data.$remove
-        delete data.$remove
-      }
-
-      const updateArguments = {
-        $set: data,
-        $push: push,
-        $pull: pull
-      }
-      
-      database[targetDatabase as keyof typeof database].update({ _id }, updateArguments, {}, (err, doc) => {
-        if (err) {
-          res.status(500).json(err)
-          return
-        }
-
-        if (doc < 1) {
-          res.status(400).json({
-            detail: "Entity not found"
-          })
-          return
-        }
-
-        res.status(200).json({
-          detail: "Updated successfully"
+      if (data["$connect"]) {
+        Object.entries(data["$connect"]).forEach(([key, value]) => {
+          if (Array.isArray(value)) {
+            data[key] = {
+              connect: value.map((id) => ({ id }))
+            }
+          } else {
+            data[key] = {
+              connect: { id: value }
+            }
+          }
         })
-      })
-    } catch (err) {
-      if (err instanceof Nedb) {
-        res.status(500).json(err)
+      }
+
+      if (data["$disconnect"]) {
+        Object.entries(data["$disconnect"]).forEach(([key, value]) => {
+          if (Array.isArray(value)) {
+            data[key] = {
+              ...data[key],
+              disconnect: value.map((id) => ({ id }))
+            }
+          } else {
+            data[key] = {
+              ...data[key],
+              disconnect: { id: value }
+            }
+          }
+        })
+      }
+
+      delete data["$connect"]
+      delete data["$disconnect"]
+
+      const Update = model.update.bind(model)
+
+      const response = await Update(
+        {
+          where: { id },
+          data
+        }
+      )
+
+      res.status(200).json(
+        {
+          "detail": "Updated successfully",
+        }
+      )
+
+    } catch (err: any) {
+
+      if (err.code === 'P2025') {
+        res.status(400).json({
+          "detail": "Entry not found!"
+        })
         return
       }
-      res.status(500).json(err)
+
+      console.error(err)
+      res.status(500).json({ ...err })
     }
-  };
+  }
+}
+
+export function prismaFindUnique(model: any, prismaIncludeConfig?: Object): RequestHandler {
+  return async (req, res) => {
+    try {
+      const id = Number(req.params.id)
+
+      const FindOne = model.findUnique.bind(model)
+
+      const response = await FindOne(
+        {
+          where: { id },
+          include: prismaIncludeConfig
+        }
+      )
+
+      if (response === null)
+        throw new Error('P2025')
+
+      res.status(200).json(response)
+
+    } catch (err: any) {
+
+      if (err.code === 'P2025' || err.message === 'P2025') {
+        res.status(400).json({
+          "detail": "Entry not found!"
+        })
+        return
+      }
+
+      console.error(err)
+      res.status(400).json({ ...err })
+    }
+  }
+}
+
+export function prismaFindMany(model: any, prismaIncludeConfig?: Object): RequestHandler {
+  return async (req, res) => {
+    try {
+      const page = Number(req.query.page) || 0
+      const take = Number(req.query.take) || 10
+
+      const FindMany = model.findMany.bind(model)
+
+      const response = await FindMany(
+        {
+          include: prismaIncludeConfig,
+          skip: page > 0 ? ((page * take) + 1) : 0,
+          take: take
+        }
+      )
+
+      res.status(200).json(response)
+
+    } catch (err: any) {
+
+      if (err.code === 'P2025') {
+        res.status(400).json({
+          "detail": "Entry not found!"
+        })
+        return
+      }
+
+      console.error(err)
+      res.status(400).json({ ...err })
+    }
+  }
+}
+
+export function prismaFindManySimpleFilter(model: any, prismaWhereConfig: Object = {}, prismaIncludeConfig?: Object): RequestHandler {
+  return async (req, res) => {
+    try {
+      const page = Number(req.query.page) || 0
+      const take = Number(req.query.take) || 10
+
+      const FindMany = model.findMany.bind(model)
+
+      let formatedWhereConfig = {}
+      Object.entries(prismaWhereConfig).forEach(([key, value]) => {
+        formatedWhereConfig = {
+          ...formatedWhereConfig,
+          [key]: {
+            [value]: req.body[key]
+          }
+        }
+      })
+
+      const response = await FindMany(
+        {
+          // where: { ...prismaWhereConfig },
+          where: formatedWhereConfig,
+          include: prismaIncludeConfig ,
+          skip: page > 0 ? ((page * take) + 1) : 0,
+          take: take
+        }
+      )
+
+      res.status(200).json(response)
+
+    } catch (err: any) {
+
+      if (err.code === 'P2025') {
+        res.status(400).json({
+          "detail": "Entry not found!"
+        })
+        return
+      }
+
+      console.error(err)
+      res.status(400).json({ ...err })
+    }
+  }
+}
+
+export function prismaDelete(model: any): RequestHandler {
+  return async (req, res) => {
+    try {
+      const id = Number(req.params.id)
+
+      const Delete = model.delete.bind(model)
+
+      const response = await Delete({ where: { id } })
+
+      res.status(200).json(
+        {
+          "detail": "Deleted successfully",
+        }
+      )
+
+    } catch (err: any) {
+
+      if (err.code === 'P2025') {
+        res.status(400).json({
+          "detail": "Entry not found!"
+        })
+        return
+      }
+
+      console.error(err)
+      res.status(400).json({ ...err })
+    }
+  }
 }

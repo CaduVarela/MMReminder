@@ -2,7 +2,7 @@ POST http://localhost:3000/api/person HTTP/1.1
 content-type: application/json
 
 {
-  "name": "sampleaaaaaaaaaa",
+  "name": "Teste",
   "email": "aaaa@gmail.com",
   "phone": "42999362757"
 }
@@ -12,17 +12,21 @@ GET http://localhost:3000/api/person HTTP/1.1
 content-type: application/json
 
 ###### 
-GET http://localhost:3000/api/person/gjf2TKdF3xWG0EAF HTTP/1.1
+GET http://localhost:3000/api/person/1 HTTP/1.1
 content-type: application/json
 
 #####
-DELETE http://localhost:3000/api/person/gjf2TKdF3xWG0EAF HTTP/1.1
+DELETE http://localhost:3000/api/person/1 HTTP/1.1
 content-type: application/json
 
 #####
-PUT http://localhost:3000/api/person/1hFyzCcAJkgupLMs HTTP/1.1
+PUT http://localhost:3000/api/person/2 HTTP/1.1
 content-type: application/json
 
 {
-  "name": "Bruh"
+  "name": "Bruh",
+
+  "$connect": {
+    "team": [ 1 ]
+  }
 }

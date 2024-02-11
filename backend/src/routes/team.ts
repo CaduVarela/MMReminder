@@ -1,8 +1,13 @@
-import { RequestHandler, Router } from 'express'
+import { Router } from 'express'
 import { z } from 'zod'
 
 import { zodValidate } from '../utils/zodValidate'
-import { nedbCreate, nedbDelete, nedbFindMany, nedbFindOne, nedbUpdate } from '../utils/factoriesRoute'
+import { prismaCreate, prismaDelete, prismaFindMany, prismaFindUnique, prismaUpdate } from '../utils/factoriesRoute'
+
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
+const model = prisma.team
 
 const route = Router()
 
@@ -10,7 +15,7 @@ const route = Router()
 const zodSchemaCreate = z.object({
   body: z.object({
     name: z.string(),
-    member: z.string().min(16).max(16).array()
+    person: z.number().array().optional()
   }).strict()
 })
 
@@ -18,34 +23,32 @@ const zodSchemaUpdate = z.object({
   body: z.object({
     name: z.string().optional(),
 
-    $add: z.object({
-      member: z.string().min(16).max(16)
+    $connect: z.object({
+      person: z.number().array().optional()
     }).strict().optional(),
     
-    $remove: z.object({
-      member: z.string().min(16).max(16)
+    $disconnect: z.object({
+      person: z.number().array().optional()
     }).strict().optional(),
     
   }).strict()
 })
 
-const targetDatabase = "team"
-
 route.post('/',
   zodValidate(zodSchemaCreate),
-  nedbCreate(targetDatabase))
+  prismaCreate(model))
 
 route.get('/',
-  nedbFindMany(targetDatabase))
+  prismaFindMany(model))
 
 route.get('/:id',
-  nedbFindOne(targetDatabase))
+  prismaFindUnique(model, { person: true }))
 
 route.put('/:id',
   zodValidate(zodSchemaUpdate),
-  nedbUpdate(targetDatabase))
+  prismaUpdate(model))
 
 route.delete('/:id',
-  nedbDelete(targetDatabase))
+  prismaDelete(model))
 
 export default route
