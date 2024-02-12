@@ -10,7 +10,7 @@ GET http://localhost:3000/api/team HTTP/1.1
 content-type: application/json
 
 ###### 
-@target = 2
+@target = 1
 
 GET http://localhost:3000/api/team/{{target}} HTTP/1.1
 content-type: application/json

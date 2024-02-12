@@ -27,7 +27,7 @@ const zodSchemaCreate = z.object({
     ).optional(),
 
     $connect: z.object({
-      team: z.number().optional()
+      team: z.number().array().optional()
     }).strict().optional()
   }).strict()
 })
@@ -47,7 +47,7 @@ const zodSchemaUpdate = z.object({
     ).optional(),
 
     $connect: z.object({
-      team: z.number().optional().array()
+      team: z.number().array().optional()
     }).strict().optional(),
 
     $disconnect: z.object({

@@ -4,7 +4,10 @@ content-type: application/json
 {
   "name": "Teste",
   "email": "aaaa@gmail.com",
-  "phone": "42999362757"
+  "phone": "42999362757",
+  "$connect": {
+    "team": [ 1 ]
+  }
 }
 
 #####
