@@ -14,6 +14,12 @@ import { stateType } from './store/slice'
 // Palette
 import palette from './assets/styles/palette.module.scss'
 
+
+import AddButton from './components/CustomMUI/AddButton'
+import EditButton from './components/CustomMUI/EditButton'
+import DeleteButton from './components/CustomMUI/DeleteButton'
+import FilterButton from './components/CustomMUI/FilterButton'
+
 function App() {
 
   const tab = useSelector((state: stateType) => state.tab.tab)
@@ -24,8 +30,13 @@ function App() {
 
       <div className='background'></div>
 
-      {/* {tab === "teams" && <TeamsPage/>} */}
-      {/* {tab === "persons" && <PersonsPage/>} */}
+      <AddButton>ADD</AddButton>
+      <EditButton>EDIT</EditButton>
+      <DeleteButton>DELETE</DeleteButton>
+      <FilterButton>FILTER</FilterButton>
+
+      {tab === "teams" && <TeamsPage/>}
+      {tab === "persons" && <PersonsPage/>}
     </main>
   )
 }
