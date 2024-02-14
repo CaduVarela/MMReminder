@@ -18,6 +18,9 @@ $teamCardInternalPadding: 32px;
   border-radius: 8px;
 
   transition: all .05s;
+
+  z-index: 4;
+
   &:hover {
     cursor: pointer;
     filter: contrast(0.95);
@@ -45,8 +48,24 @@ $teamCardInternalPadding: 32px;
     font-size: 24px;
     font-weight: bold;
 
-    & > * {
-      
-    }
+    &>* {}
   }
+}
+
+@keyframes slideDown {
+  0% {
+    filter: opacity(.4);
+    transform: translateY(-25%) scaleY(.69);
+  }
+
+  100% {
+    filter: opacity(1);
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+.opened-content {
+  z-index: 2;
+  animation: slideDown .2s ease-out;
+  
 }

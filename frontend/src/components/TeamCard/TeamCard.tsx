@@ -8,58 +8,17 @@ import TeamControlBar from '../TeamControlBar/TeamControlBar';
 // Table
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 
-import { TableFooter, TablePagination, styled } from '@mui/material';
 import EditButtonOutline from '../CustomMUI/Buttons/EditButtons/EditButtonOutline';
 import DeleteButton from '../CustomMUI/Buttons/DeleteButtons/DeleteButton';
 
-const StyledTableContainer = styled(TableContainer)({
-  backgroundColor: palette.cardLightColor,
-  borderRadius: '8px',
-  border: `1px solid ${palette.lightColorShade}`
-})
-
-const HeadTableCell = styled(TableCell)({
-  fontFamily: '"Montserrat", sans-serif',
-  fontWeight: 'bold',
-  fontSize: '18px',
-  color: palette.cardDarkColor,
-})
-
-const BodyTableCell = styled(TableCell)({
-  fontFamily: '"Montserrat", sans-serif',
-  fontWeight: 'medium',
-  fontSize: '16px',
-  color: palette.cardDarkColor,
-})
-
-const StyledTableRow = styled(TableRow)({
-  borderColor: palette.lightColorShade,
-
-  '&:nth-of-type(odd)': {
-    backgroundColor: `${palette.cardDarkColor}08`,
-  },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-})
-
-const StyledTablePagination = styled(TablePagination)({
-  width: '95%',
-  margin: '-1px auto 0',
-  display: 'flex',
-  justifyContent: 'right',
-  border: '1px solid ' + palette.lightColorShade,
-  borderTop: '1px solid ' + palette.cardLightGray + '80',
-  borderRadius: '0 0 8px 8px',
-  backgroundColor: palette.cardLightColor
-})
+import StyledTableContainer from '../CustomMUI/TableComponents/StyledTableContainer';
+import StyledHeadTableCell from '../CustomMUI/TableComponents/StyledHeadTableCell';
+import StyledBodyTableCell from '../CustomMUI/TableComponents/StyledBodyTableCell';
+import StyledTableRow from '../CustomMUI/TableComponents/StyledTableRow';
+import StyledTablePagination from '../CustomMUI/TableComponents/StyledTablePagination';
 
 function TeamCard(
   {
@@ -71,8 +30,11 @@ function TeamCard(
       teamName?: string
     }) {
 
+
+  // Page Behavior Manipulation
   const [isOpened, setIsOpened] = useState(false)
 
+  // Data Manipulation
   function createData(
     name: string,
     email: string,
@@ -99,11 +61,16 @@ function TeamCard(
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
 
-  function handleChangePage(event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, page: number) {
-    setPage(page)
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, 
+    newPage: number
+  ) => {
+    setPage(newPage)
   }
 
-  function handleChangeRowsPerPage(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   }
@@ -118,37 +85,36 @@ function TeamCard(
         </div>
       </div>
       {isOpened &&
-        <div>
+        <div className='opened-content'>
           <TeamControlBar />
 
           <StyledTableContainer
             sx={{
               width: '95%',
               margin: '8px auto 0',
-              borderRadius: '8px 8px 0 0',
             }}>
             <Table size='small'>
               <TableHead sx={{ height: 48 }}>
                 <TableRow >
-                  <HeadTableCell>Name</HeadTableCell>
-                  <HeadTableCell>Email</HeadTableCell>
-                  <HeadTableCell>Phone</HeadTableCell>
-                  <HeadTableCell>Options</HeadTableCell>
+                  <StyledHeadTableCell>Name</StyledHeadTableCell>
+                  <StyledHeadTableCell>Email</StyledHeadTableCell>
+                  <StyledHeadTableCell>Phone</StyledHeadTableCell>
+                  <StyledHeadTableCell>Options</StyledHeadTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {rows.map((row) => (
                   <StyledTableRow key={row.name} sx={{}}>
-                    <BodyTableCell>{row.name}</BodyTableCell>
-                    <BodyTableCell>{row.email}</BodyTableCell>
-                    <BodyTableCell>{row.phone}</BodyTableCell>
-                    <BodyTableCell>{row.options}</BodyTableCell>
+                    <StyledBodyTableCell>{row.name}</StyledBodyTableCell>
+                    <StyledBodyTableCell>{row.email}</StyledBodyTableCell>
+                    <StyledBodyTableCell>{row.phone}</StyledBodyTableCell>
+                    <StyledBodyTableCell>{row.options}</StyledBodyTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
-
             </Table>
           </StyledTableContainer>
+
           <StyledTablePagination
             rowsPerPageOptions={[5, 10, 25]}
             count={rows.length}
