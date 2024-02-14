@@ -1,24 +1,19 @@
 import './App.scss'
 
-import { useState } from 'react'
+// import { useState } from 'react'
 
 // Components
-import { TeamsPage } from './components/TeamsPage/TeamsPage'
-import { PersonsPage } from './components/PersonsPage/PersonsPage'
-import { Header } from './components/Header/Header'
+import TeamsPage from './components/Pages/TeamsPage/TeamsPage'
+import PersonsPage from './components/Pages/PersonsPage/PersonsPage'
+import SiteHeader from './components/SiteHeader/SiteHeader'
+import SiteBody from './components/SiteBody/SiteBody'
 
 // Redux
 import { useSelector } from 'react-redux'
 import { stateType } from './store/slice'
 
 // Palette
-import palette from './assets/styles/palette.module.scss'
-
-
-import AddButton from './components/CustomMUI/AddButton'
-import EditButton from './components/CustomMUI/EditButton'
-import DeleteButton from './components/CustomMUI/DeleteButton'
-import FilterButton from './components/CustomMUI/FilterButton'
+// import palette from './assets/styles/palette.module.scss'
 
 function App() {
 
@@ -26,17 +21,14 @@ function App() {
 
   return (
     <main>
-      <Header/>
+      <SiteHeader />
 
       <div className='background'></div>
 
-      <AddButton>ADD</AddButton>
-      <EditButton>EDIT</EditButton>
-      <DeleteButton>DELETE</DeleteButton>
-      <FilterButton>FILTER</FilterButton>
-
-      {tab === "teams" && <TeamsPage/>}
-      {tab === "persons" && <PersonsPage/>}
+      <SiteBody>
+        {tab === "teams" && <TeamsPage />}
+        {tab === "persons" && <PersonsPage />}
+      </SiteBody>
     </main>
   )
 }

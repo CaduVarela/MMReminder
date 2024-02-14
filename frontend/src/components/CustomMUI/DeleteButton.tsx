@@ -1,19 +1,14 @@
 import styled from "@emotion/styled";
-import { Button } from "@mui/material";
 import palette from './../../assets/styles/palette.module.scss'
 
 import DeleteIcon from '@mui/icons-material/Delete';
+import CustomButton from "./CustomButton";
 
-const DeleteButton = styled(Button)({
-  backgroundColor: palette.themeColor,
+const DeleteButton = styled(CustomButton)({
+  backgroundColor: palette.warningColor,
   color: palette.lightColor,
-  fontWeight: 'bold',
-  boxShadow: 'none',
-  transition: 'all .1s',
-  fontFamily: 'Montserrat, sans-serif',
   ":hover": {
-    backgroundColor: palette.themeColor,
-    filter: "contrast(.85)"
+    backgroundColor: palette.warningColor,
   }
 })
 

@@ -1,0 +1,50 @@
+
+$header-height: 17vh;
+$header-min-height: 120px;
+$header-max-height: 160px;
+
+.site-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.top-section,
+.bottom-section {
+
+  display: flex;
+  align-items: center;
+
+  background-color: $themeColor;
+
+  margin: 0;
+  padding: 0;
+
+  width: 100vw;
+
+  // min-height: 60px;
+  // max-height: 80px;
+  // height: 8.5vh;
+  height: clamp($header-min-height/2, $header-height/2, $header-max-height/2);
+  
+  h1 {
+    color: $lightColor;
+
+    width: 100%;
+    text-align: center;
+  }
+
+  .italic {
+    font-style: italic;
+  }
+}
+
+.top-section {
+  border-bottom: 1px solid $themeColorDark;
+}
+
+.bottom-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

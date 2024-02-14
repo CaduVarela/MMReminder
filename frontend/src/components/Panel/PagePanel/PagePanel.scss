@@ -1,0 +1,23 @@
+.panel-container {
+
+  padding-top: 32px;
+
+  .panel {
+    display: flex; 
+    flex-direction: column;
+
+    flex-grow: 1;
+  
+    margin: 0 auto;
+  
+    width: 73vw;
+    height: 73vh;
+    min-width: 480px;
+  
+    background-color: $lightColor;
+
+    border-radius: 13px;
+
+    box-shadow: 0 1px 8px rgba($themeColor, .08);
+  }
+}

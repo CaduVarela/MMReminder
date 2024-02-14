@@ -1,0 +1,32 @@
+.panel-header {
+  width: calc(100% - 32px * 2);
+
+  // min-height: calc(104px - 32px * 2);
+  // height: calc(15% - 32px * 2);
+
+  overflow: hidden;
+  padding: 32px 32px 16px 32px;
+
+  border-bottom: 1px solid $lightColorShade;
+
+  overflow: visible;
+
+  display: flex;
+  align-items: center;
+
+  flex-grow: 1;
+
+  justify-content: space-around;
+  gap: 16px 32px;
+
+  flex-wrap: wrap;
+
+  & > * {
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    color: $darkColor
+  }
+}

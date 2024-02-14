@@ -1,0 +1,6 @@
+@import "./../SiteHeader/SiteHeader.scss";
+
+.site-body {
+  margin-top: clamp($header-min-height, $header-height, $header-max-height);
+  color: $darkColor
+}

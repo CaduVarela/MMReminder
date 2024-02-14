@@ -16,13 +16,12 @@ const HeaderButton = styled(Button)({
 
   margin: '0 16px',
 
+  transition: 'all .2s',
+
   ":hover": {
-    boxShadow: 'none',
+    boxShadow: '1 2px 2px rgba(0, 0, 0, .1)',
     backgroundColor: palette.themeColorDark,
-  },
-  ":selected": {
-    backgroundColor: palette.themeColorDark,
-  },
+  }
 })
 
 export default HeaderButton

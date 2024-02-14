@@ -1,0 +1,24 @@
+$teamCardInternalPadding: 16px;
+
+.team-control-bar {
+
+  background-color: $cardLightColor;
+  border: 1px solid $lightColorShade;
+
+  width: calc(95% - $teamCardInternalPadding * 2);
+  min-height: calc(64px - $teamCardInternalPadding * 2);
+
+  flex-grow: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  flex-wrap: wrap;
+  gap: 32px 16px;
+
+  margin: 8px auto 0;
+  padding: $teamCardInternalPadding $teamCardInternalPadding $teamCardInternalPadding;
+
+  border-radius: 8px;
+}
