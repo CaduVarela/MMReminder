@@ -5,8 +5,8 @@ import './App.scss'
 // Components
 import TeamsPage from './components/Pages/TeamsPage/TeamsPage'
 import PersonsPage from './components/Pages/PersonsPage/PersonsPage'
-import SiteHeader from './components/SiteHeader/SiteHeader'
-import SiteBody from './components/SiteBody/SiteBody'
+import SiteHeader from './components/SiteMainComponents/SiteHeader/SiteHeader'
+import SiteBody from './components/SiteMainComponents/SiteBody/SiteBody'
 
 // Redux
 import { useSelector } from 'react-redux'

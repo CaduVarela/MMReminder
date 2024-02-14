@@ -5,20 +5,21 @@ import palette from '@assets/styles/palette.module.scss';
 import PersonIcon from '@mui/icons-material/Person';
 import TeamControlBar from '../TeamControlBar/TeamControlBar';
 
+//
+import EditButtonOutline from '../../CustomMUI/Buttons/EditButtons/EditButtonOutline';
+import DeleteButton from '../../CustomMUI/Buttons/DeleteButtons/DeleteButton';
+
 // Table
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-import EditButtonOutline from '../CustomMUI/Buttons/EditButtons/EditButtonOutline';
-import DeleteButton from '../CustomMUI/Buttons/DeleteButtons/DeleteButton';
-
-import StyledTableContainer from '../CustomMUI/TableComponents/StyledTableContainer';
-import StyledHeadTableCell from '../CustomMUI/TableComponents/StyledHeadTableCell';
-import StyledBodyTableCell from '../CustomMUI/TableComponents/StyledBodyTableCell';
-import StyledTableRow from '../CustomMUI/TableComponents/StyledTableRow';
-import StyledTablePagination from '../CustomMUI/TableComponents/StyledTablePagination';
+import StyledTableContainer from '../../CustomMUI/TableComponents/StyledTableContainer';
+import StyledHeadTableCell from '../../CustomMUI/TableComponents/StyledHeadTableCell';
+import StyledBodyTableCell from '../../CustomMUI/TableComponents/StyledBodyTableCell';
+import StyledTableRow from '../../CustomMUI/TableComponents/StyledTableRow';
+import StyledTablePagination from '../../CustomMUI/TableComponents/StyledTablePagination';
 
 function TeamCard(
   {
@@ -46,7 +47,8 @@ function TeamCard(
 
   const options = <div style={{ display: 'flex', justifyContent: 'space-around', gap: '0 8px' }}>
     <EditButtonOutline size='small' style={{ height: 32 }}>EDIT</EditButtonOutline>
-    <DeleteButton size='small' style={{ height: 32 }}>DELETE</DeleteButton>
+    {/* <DeleteButton size='small' style={{ height: 32, padding: '0 6px 0 16px' }}></DeleteButton> */}
+    <DeleteButton size='small'style={{ height: 32 }}>DEL</DeleteButton>
   </div>
 
   const rows = [
@@ -62,7 +64,7 @@ function TeamCard(
   const [rowsPerPage, setRowsPerPage] = useState(5)
 
   const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, 
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
     newPage: number
   ) => {
     setPage(newPage)

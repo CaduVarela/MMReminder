@@ -4,9 +4,11 @@ import { TablePagination } from "@mui/material";
 
 const StyledTablePagination = styled(TablePagination)({
   width: '95%',
+  height: '40px',
   margin: '-1px auto 0',
   display: 'flex',
   justifyContent: 'right',
+  alignItems: 'center',
   border: '1px solid ' + palette.lightColorShade,
   borderTop: '1px solid ' + palette.cardLightGray + '80',
   borderRadius: '0 0 8px 8px',

@@ -1,6 +1,6 @@
 $teamCardInternalPadding: 32px;
 
-.team-card {
+.person-card {
   background-color: $cardLightColor;
   border: 1px solid $lightColorShade;
 
@@ -26,16 +26,31 @@ $teamCardInternalPadding: 32px;
     filter: contrast(0.95);
   }
 
-  h1 {
-    font-family: 'Montserrat', sans-serif;
-    color: $cardDarkColor;
-    font-weight: bold;
-    font-size: 28px;
-
+  .person-info {
     width: 80%;
 
-    text-wrap: wrap;
-    word-break: break-all;
+    font-family: 'Montserrat', sans-serif;
+    color: $cardDarkColor;
+
+    h1 {
+      font-weight: bold;
+      font-size: 24px;
+
+      width: 100%;
+
+      text-wrap: wrap;
+      word-break: break-all;
+    }
+
+    p {
+      font-weight: normal;
+      font-size: 16px;
+
+      width: 100%;
+
+      text-wrap: wrap;
+      word-break: break-all;
+    }
   }
 
   .person-counter {
@@ -47,19 +62,24 @@ $teamCardInternalPadding: 32px;
 
     font-size: 24px;
     font-weight: bold;
-
-    &>* {}
   }
 }
 
 @keyframes slideDown {
   0% {
-    filter: opacity(.4);
+    filter: opacity(0);
     transform: translateY(-25%) scaleY(.69);
   }
 
-  100% {
+  50% {
+    filter: opacity(.4);
+  }
+
+  85% {
     filter: opacity(1);
+  }
+
+  100% {
     transform: translateY(0) scaleY(1);
   }
 }
@@ -67,5 +87,5 @@ $teamCardInternalPadding: 32px;
 .opened-content {
   z-index: 2;
   animation: slideDown .2s ease-out;
-  
+
 }
