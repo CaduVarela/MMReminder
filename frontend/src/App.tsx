@@ -15,6 +15,8 @@ import { stateType } from './store/slice'
 // Palette
 // import palette from './assets/styles/palette.module.scss'
 
+
+
 function App() {
 
   const tab = useSelector((state: stateType) => state.tab.tab)

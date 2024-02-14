@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import palette from './../../assets/styles/palette.module.scss'
+import palette from '@assets/styles/palette.module.scss'
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import CustomButton from "./CustomButton";
+import CustomButton from "../CustomButton";
 
 const DeleteButton = styled(CustomButton)({
   backgroundColor: palette.warningColor,

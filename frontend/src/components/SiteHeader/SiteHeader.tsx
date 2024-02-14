@@ -2,9 +2,9 @@ import './SiteHeader.scss'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { changeTab, stateType } from '../../store/slice'
+import palette from '@assets/styles/palette.module.scss'
 
-import palette from './../../assets/styles/palette.module.scss'
-import HeaderButton from '../CustomMUI/HeaderButton'
+import HeaderButton from '../CustomMUI/Buttons/HeaderButton'
 
 export default function SiteHeader() {
 

@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import palette from './../../assets/styles/palette.module.scss'
+import palette from '@assets/styles/palette.module.scss'
 
 import EditIcon from '@mui/icons-material/Edit';
-import CustomButton from "./CustomButton";
+import CustomButton from "../CustomButton";
 
 const EditButton = styled(CustomButton)({
   backgroundColor: palette.themeColorAnalogous,

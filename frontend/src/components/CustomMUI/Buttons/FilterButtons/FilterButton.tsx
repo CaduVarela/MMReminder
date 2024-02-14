@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import palette from './../../assets/styles/palette.module.scss'
+import palette from '@assets/styles/palette.module.scss'
 
 import SearchIcon from '@mui/icons-material/Search';
-import CustomButton from "./CustomButton";
+import CustomButton from "../CustomButton";
 
 const FilterButton = styled(CustomButton)({
   backgroundColor: palette.themeColorTetradic4,

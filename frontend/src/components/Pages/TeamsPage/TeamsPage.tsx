@@ -1,22 +1,21 @@
 import './TeamPage.scss'
 
 import { useState } from 'react'
-
-import palette from './../../../assets/styles/palette.module.scss'
+import palette from '@assets/styles/palette.module.scss'
 
 // Components
 import PagePanel from "../../Panel/PagePanel/PagePanel"
 import RoundedTextBar from "../../CustomMUI/RoundedTextBar"
-import FilterButton from '../../CustomMUI/FilterButton'
-import AddButton from '../../CustomMUI/AddButton'
+import FilterButton from '../../CustomMUI/Buttons/FilterButtons/FilterButton'
+import AddButton from '../../CustomMUI/Buttons/AddButtons/AddButton'
 import PanelHeader from '../../Panel/PanelHeader/PanelHeader'
 import TeamCard from '../../TeamCard/TeamCard'
 import PanelBody from '../../Panel/PanelBody/PanelBody'
 
 // Icons
 import GroupsIcon from '@mui/icons-material/Groups';
-import AddButtonOutline from '../../CustomMUI/AddButtonOutline'
-import FilterButtonOutline from '../../CustomMUI/FilterButtonOutline'
+import AddButtonOutline from '../../CustomMUI/Buttons/AddButtons/AddButtonOutline'
+import FilterButtonOutline from '../../CustomMUI/Buttons/FilterButtons/FilterButtonOutline'
 
 
 function TeamsPage() {

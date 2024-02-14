@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import palette from './../../assets/styles/palette.module.scss'
+import palette from '@assets/styles/palette.module.scss'
 
 import AddIcon from '@mui/icons-material/Delete';
-import CustomButton from "./CustomButton";
+import CustomButton from "../CustomButton";
 
 const AddButtonOutline = styled(CustomButton)({
   backgroundColor: palette.lightColor,
