@@ -42,21 +42,27 @@ function TeamControlBar({ teamID, teamName }: { teamID: number, teamName: string
         open={showAddExistingPerson}
         onClose={handleAddExistingPerson}
       >
-        <PopupAddExistingPerson />
+        <>
+          <PopupAddExistingPerson />
+        </>
       </PopupModal>
 
       <PopupModal
         open={showShowDeleteTeam}
         onClose={handleShowDeleteTeam}
       >
-        <PopupDeleteTeam teamID={teamID} teamName={teamName} />
+        <>
+          <PopupDeleteTeam teamID={teamID} teamName={teamName} />
+        </>
       </PopupModal>
 
       <PopupModal
         open={showEditTeam}
         onClose={handleShowEditTeam}
       >
-        <PopupEditTeam teamID={teamID} teamName={teamName} />
+        <>
+          <PopupEditTeam teamID={teamID} teamName={teamName} />
+        </>
       </PopupModal>
 
       <div className='team-control-bar'>

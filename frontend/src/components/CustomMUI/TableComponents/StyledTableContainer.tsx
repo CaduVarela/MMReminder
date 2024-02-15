@@ -4,7 +4,7 @@ import { TableContainer } from "@mui/material";
 
 const StyledTableContainer = styled(TableContainer)({
   backgroundColor: palette.cardLightColor,
-  borderRadius: '8px 8px 0 0',
+  borderRadius: '8px',
   border: `1px solid ${palette.lightColorShade}`
 })
 

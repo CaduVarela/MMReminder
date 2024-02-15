@@ -22,6 +22,7 @@ import StyledTablePagination from '../../CustomMUI/TableComponents/StyledTablePa
 import PopupModal from '../../Popups/PopupModal';
 import PopupRemovePersonFromTeam from '../../Popups/PopupForms/PopupRemovePersonFromTeam/PopupRemovePersonFromTeam';
 import PopupEditPerson from '../../Popups/PopupForms/Person/PopupEditPerson/PopupEditPerson';
+import { TableFooter } from '@mui/material';
 
 function TeamCard(
   {
@@ -97,14 +98,18 @@ function TeamCard(
         open={showRemovePersonFromTeam}
         onClose={handleShowRemovePersonFromTeam}
       >
-        <PopupRemovePersonFromTeam personID={targetPerson.id} personName={targetPerson.name} teamID={teamID} teamName={teamName} />
+        <>
+          <PopupRemovePersonFromTeam personID={targetPerson.id} personName={targetPerson.name} teamID={teamID} teamName={teamName} />
+        </>
       </PopupModal>
 
       <PopupModal
         open={showEditPerson}
         onClose={handleShowEditPerson}
       >
-        <PopupEditPerson personID={targetPerson.id} personName={targetPerson.name} personEmail={targetPerson.email} personPhone={targetPerson.phone}/>
+        <>
+          <PopupEditPerson personID={targetPerson.id} personName={targetPerson.name} personEmail={targetPerson.email} personPhone={targetPerson.phone} />
+        </>
       </PopupModal>
 
       <div className='team-card' onClick={() => setIsOpened(!isOpened)}>
@@ -134,7 +139,7 @@ function TeamCard(
               </TableHead>
               <TableBody>
                 {rows.map((row) => (
-                  <StyledTableRow>
+                  <StyledTableRow key={row.id}>
                     <StyledBodyTableCell>{row.name}</StyledBodyTableCell>
                     <StyledBodyTableCell>{row.email}</StyledBodyTableCell>
                     <StyledBodyTableCell>{row.phone}</StyledBodyTableCell>
@@ -142,19 +147,19 @@ function TeamCard(
                       <div style={{ display: 'flex', justifyContent: 'space-around', gap: '0 8px' }}>
                         <EditButtonOutline size='small' style={{ height: 32 }} onClick={() => {
                           setTargetPerson({
-                            id: row.id, 
+                            id: row.id,
                             name: row.name,
                             email: row.email,
-                            phone: row.phone+'',
+                            phone: row.phone + '',
                           })
                           handleShowEditPerson()
                         }}>EDIT</EditButtonOutline>
                         <DeleteButton size='small' style={{ height: 32 }} onClick={() => {
                           setTargetPerson({
-                            id: row.id, 
+                            id: row.id,
                             name: row.name,
                             email: row.email,
-                            phone: row.phone+''
+                            phone: row.phone + ''
                           })
                           handleShowRemovePersonFromTeam()
                         }}>DEL</DeleteButton>
@@ -162,20 +167,24 @@ function TeamCard(
                     </StyledBodyTableCell>
                   </StyledTableRow>
                 ))}
+
               </TableBody>
+              <TableFooter style={{ height: 24 }} sx={{ height: 24 }}>
+                <TableRow>
+                  <StyledTablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </TableRow>
+              </TableFooter>
             </Table>
           </StyledTableContainer>
 
-          <StyledTablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            count={rows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
 
-            colSpan={4}
-          />
         </div>
       }
     </>

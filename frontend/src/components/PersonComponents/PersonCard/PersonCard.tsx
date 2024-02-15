@@ -5,7 +5,6 @@ import palette from '@assets/styles/palette.module.scss';
 import PersonIcon from '@mui/icons-material/Person';
 
 //
-import EditButtonOutline from '../../CustomMUI/Buttons/EditButtons/EditButtonOutline';
 import DeleteButton from '../../CustomMUI/Buttons/DeleteButtons/DeleteButton';
 
 // Table
@@ -22,6 +21,7 @@ import StyledTablePagination from '../../CustomMUI/TableComponents/StyledTablePa
 import PersonControlBar from '../PersonControlBar/PersonControlBar';
 import PopupModal from '../../Popups/PopupModal';
 import PopupRemovePersonFromTeam from '../../Popups/PopupForms/PopupRemovePersonFromTeam/PopupRemovePersonFromTeam';
+import { TableFooter } from '@mui/material';
 
 function PersonCard(
   {
@@ -90,13 +90,15 @@ function PersonCard(
         open={showRemovePersonFromTeam}
         onClose={handleShowRemovePersonFromTeam}
       >
-        <PopupRemovePersonFromTeam personID={personID} personName={personName} teamID={targetTeam.id} teamName={targetTeam.name}/>
+        <>
+          <PopupRemovePersonFromTeam personID={personID} personName={personName} teamID={targetTeam.id} teamName={targetTeam.name} />
+        </>
       </PopupModal>
 
       <div className='person-card' onClick={() => setIsOpened(!isOpened)}>
         <div className='person-info'>
           <h1>{personName}</h1>
-          <p>{personEmail} | {personPhone}</p>
+          <p>{personEmail} {personPhone ? `| ${personPhone}` : ''}</p>
         </div>
         <div className='person-counter'>
           <PersonIcon style={{ fontSize: '32px' }} />
@@ -121,13 +123,13 @@ function PersonCard(
               </TableHead>
               <TableBody>
                 {rows.map((row) => (
-                  <StyledTableRow>
+                  <StyledTableRow key={row.id}>
                     <StyledBodyTableCell>{row.name}</StyledBodyTableCell>
                     <StyledBodyTableCell>
                       <div style={{ display: 'flex', justifyContent: 'left', gap: '0 8px' }}>
                         <DeleteButton size='small' style={{ height: 32 }} onClick={() => {
                           setTargetTeam({
-                            id: row.id, 
+                            id: row.id,
                             name: row.name
                           })
                           handleShowRemovePersonFromTeam()
@@ -137,19 +139,20 @@ function PersonCard(
                   </StyledTableRow>
                 ))}
               </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <StyledTablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </TableRow>
+              </TableFooter>
             </Table>
           </StyledTableContainer>
-
-          <StyledTablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            count={rows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-
-            colSpan={4}
-          />
         </div>
       }
     </>

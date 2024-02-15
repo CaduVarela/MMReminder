@@ -26,9 +26,9 @@ function PopupAddExistingTeam() {
 
   const rows = [
     createData(0, 'Sample Team 1'),
-    createData(0, 'Sample Team 2'),
-    createData(0, 'Sample Team 3'),
-    createData(0, 'Sample Team 4'),
+    createData(1, 'Sample Team 2'),
+    createData(2, 'Sample Team 3'),
+    createData(3, 'Sample Team 4'),
   ]
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

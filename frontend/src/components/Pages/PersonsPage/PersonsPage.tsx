@@ -19,7 +19,7 @@ import AddButton from '../../CustomMUI/Buttons/AddButtons/AddButton'
 import AddButtonOutline from '../../CustomMUI/Buttons/AddButtons/AddButtonOutline'
 import FilterButton from '../../CustomMUI/Buttons/FilterButtons/FilterButton'
 import FilterButtonOutline from '../../CustomMUI/Buttons/FilterButtons/FilterButtonOutline'
-import { Pagination } from '@mui/material'
+import { Container, Pagination } from '@mui/material'
 import PopupModal from '../../Popups/PopupModal'
 import PopupAddNewPerson from '../../Popups/PopupForms/Person/PopupAddNewPerson/PopupAddNewPerson'
 
@@ -45,47 +45,51 @@ function PersonsPage() {
   }
 
   return (
-    <PagePanel>
-
+    <>
       <PopupModal
         open={showAddPerson}
         onClose={handleAddPerson}
       >
-        <PopupAddNewPerson />
+        <>
+          <PopupAddNewPerson />
+        </>
       </PopupModal>
 
-      <PanelHeader>
-        <PersonIcon style={{ fontSize: '48px', color: palette.cardDarkColor }} />
-        <div>
-          <RoundedTextBar
-            placeholder='Filter by Person Name'
-            style={{ marginRight: '16px' }}
-            onChange={(e) => setFilterText(e.target.value)}>
-          </RoundedTextBar>
-          <FilterButton>FILTER</FilterButton>
-        </div>
-        <AddButtonOutline onClick={handleAddPerson}>ADD PERSON</AddButtonOutline>
-      </PanelHeader>
+      <PagePanel>
 
-      <PanelBody>
-        <PersonCard
-          id={1}
-          personName='Billy Jobbson'
-          personEmail='billson@gmail.com'
-          personPhone='(42)12345-6789'
-        />
-      </PanelBody>
+        <PanelHeader>
+          <PersonIcon style={{ fontSize: '48px', color: palette.cardDarkColor }} />
+          <div>
+            <RoundedTextBar
+              placeholder='Filter by Person Name'
+              style={{ marginRight: '16px' }}
+              onChange={(e) => setFilterText(e.target.value)}>
+            </RoundedTextBar>
+            <FilterButton>FILTER</FilterButton>
+          </div>
+          <AddButtonOutline onClick={handleAddPerson}>ADD PERSON</AddButtonOutline>
+        </PanelHeader>
 
-      <PanelFooter>
-        <Pagination
-          count={personsPageCount}
-          page={personsPage}
-          onChange={handlePersonsPageChange}
-          style={{ maxHeight: 40 }}
-        />
-      </PanelFooter>
+        <PanelBody>
+          <PersonCard
+            personID={1}
+            personName='Billy Jobbson'
+            personEmail='billson@gmail.com'
+            personPhone='(42)12345-6789'
+          />
+        </PanelBody>
 
-    </PagePanel>
+        <PanelFooter>
+          <Pagination
+            count={personsPageCount}
+            page={personsPage}
+            onChange={handlePersonsPageChange}
+            style={{ maxHeight: 40 }}
+          />
+        </PanelFooter>
+
+      </PagePanel>
+    </>
   )
 }
 

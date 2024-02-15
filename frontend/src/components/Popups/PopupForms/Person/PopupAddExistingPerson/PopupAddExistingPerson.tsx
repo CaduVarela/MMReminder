@@ -34,8 +34,8 @@ function PopupAddExistingPerson() {
 
   const rows = [
     createData(0, 'Sample Person', 'sample@person.com', '(42)12345-6789'),
-    createData(0, 'Sample Person', 'sample@person.com', '(42)12345-6789'),
-    createData(0, 'Sample Person', 'sample@person.com', '(42)12345-6789')
+    createData(1, 'Sample Person', 'sample@person.com', '(42)12345-6789'),
+    createData(2, 'Sample Person', 'sample@person.com', '(42)12345-6789')
   ]
 
   return (

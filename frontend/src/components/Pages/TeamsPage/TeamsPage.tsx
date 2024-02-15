@@ -26,7 +26,7 @@ import PopupAddNewTeam from '../../Popups/PopupForms/Team/PopupAddNewTeam/PopupA
 function TeamsPage() {
 
   const [filterText, setFilterText] = useState("")
-  
+
   // Teams Pagination
   const [TeamsPage, setTeamsPage] = useState(1)
   const [teamsPageCount, setTeamsPageCount] = useState(5)
@@ -45,44 +45,48 @@ function TeamsPage() {
   }
 
   return (
-    <PagePanel>
-
+    <>
       <PopupModal
         open={showAddTeam}
         onClose={handleAddTeam}
       >
-        <PopupAddNewTeam />
+        <>
+          <PopupAddNewTeam />
+        </>
       </PopupModal>
 
-      <PanelHeader>
-        <GroupsIcon style={{ fontSize: '48px', color: palette.cardDarkColor }} />
-        <div>
-          <RoundedTextBar
-            placeholder='Filter by Team Name'
-            style={{ marginRight: '16px' }}
-            onChange={(e) => setFilterText(e.target.value)}>
-          </RoundedTextBar>
-          <FilterButton>FILTER</FilterButton>
-        </div>
-        <AddButtonOutline onClick={handleAddTeam}>ADD TEAM</AddButtonOutline>
-      </PanelHeader>
+      <PagePanel>
 
-      <PanelBody>
-        <TeamCard id={1} teamName='New Team' />
-        <TeamCard id={2} teamName='New Team' />
-        <TeamCard id={3} teamName='New Team' />
-        <TeamCard id={4} teamName='New Team' />
-        <TeamCard id={5} teamName='New Team' />
-        <TeamCard id={6} teamName='New Team' />
-        <TeamCard id={7} teamName='New Team' />
-        <TeamCard id={8} teamName='New Team' />
-      </PanelBody>
+        <PanelHeader>
+          <GroupsIcon style={{ fontSize: '48px', color: palette.cardDarkColor }} />
+          <div>
+            <RoundedTextBar
+              placeholder='Filter by Team Name'
+              style={{ marginRight: '16px' }}
+              onChange={(e) => setFilterText(e.target.value)}>
+            </RoundedTextBar>
+            <FilterButton>FILTER</FilterButton>
+          </div>
+          <AddButtonOutline onClick={handleAddTeam}>ADD TEAM</AddButtonOutline>
+        </PanelHeader>
 
-      <PanelFooter>
-        <Pagination count={teamsPageCount} page={TeamsPage} onChange={handleTeamsPageChange} />
-      </PanelFooter>
+        <PanelBody>
+          <TeamCard teamID={1} teamName='New Team' />
+          <TeamCard teamID={2} teamName='New Team' />
+          <TeamCard teamID={3} teamName='New Team' />
+          <TeamCard teamID={4} teamName='New Team' />
+          <TeamCard teamID={5} teamName='New Team' />
+          <TeamCard teamID={6} teamName='New Team' />
+          <TeamCard teamID={7} teamName='New Team' />
+          <TeamCard teamID={8} teamName='New Team' />
+        </PanelBody>
 
-    </PagePanel>
+        <PanelFooter>
+          <Pagination count={teamsPageCount} page={TeamsPage} onChange={handleTeamsPageChange} />
+        </PanelFooter>
+
+      </PagePanel>
+    </>
   )
 }
 
