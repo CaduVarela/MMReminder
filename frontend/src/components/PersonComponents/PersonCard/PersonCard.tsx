@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import './PersonCard.scss'
+import { useState } from 'react';
 import palette from '@assets/styles/palette.module.scss';
 
 import PersonIcon from '@mui/icons-material/Person';
@@ -20,16 +20,18 @@ import StyledBodyTableCell from '../../CustomMUI/TableComponents/StyledBodyTable
 import StyledTableRow from '../../CustomMUI/TableComponents/StyledTableRow';
 import StyledTablePagination from '../../CustomMUI/TableComponents/StyledTablePagination';
 import PersonControlBar from '../PersonControlBar/PersonControlBar';
+import PopupModal from '../../Popups/PopupModal';
+import PopupRemovePersonFromTeam from '../../Popups/PopupForms/PopupRemovePersonFromTeam/PopupRemovePersonFromTeam';
 
 function PersonCard(
   {
-    id,
+    personID,
     personName = '',
     personEmail = '',
     personPhone = '',
   }:
     {
-      id: number,
+      personID: number,
       personName?: string,
       personEmail?: string,
       personPhone?: string,
@@ -41,19 +43,15 @@ function PersonCard(
 
   // Table Data Manipulation
   function createData(
+    id: number,
     name: string,
-    options: React.ReactNode
   ) {
-    return { name, options };
+    return { id, name };
   }
 
-  const options = <div style={{ display: 'flex', justifyContent: 'left', gap: '0 8px' }}>
-    <DeleteButton size='small' style={{ height: 32 }}>REMOVE</DeleteButton>
-  </div>
-
   const rows = [
-    createData('Sample Team 1', options),
-    createData('Sample Team 2', options),
+    createData(0, 'Sample Team 1'),
+    createData(1, 'Sample Team 2'),
   ]
 
   // Table Manipulation
@@ -75,8 +73,26 @@ function PersonCard(
     setPage(0);
   }
 
+  // Popup
+  const [targetTeam, setTargetTeam] = useState({
+    id: -1,
+    name: ''
+  })
+
+  const [showRemovePersonFromTeam, setShowRemovePersonFromTeam] = useState(false)
+  const handleShowRemovePersonFromTeam = () => {
+    setShowRemovePersonFromTeam(prevState => !prevState)
+  }
+
   return (
     <>
+      <PopupModal
+        open={showRemovePersonFromTeam}
+        onClose={handleShowRemovePersonFromTeam}
+      >
+        <PopupRemovePersonFromTeam personID={personID} personName={personName} teamID={targetTeam.id} teamName={targetTeam.name}/>
+      </PopupModal>
+
       <div className='person-card' onClick={() => setIsOpened(!isOpened)}>
         <div className='person-info'>
           <h1>{personName}</h1>
@@ -88,8 +104,8 @@ function PersonCard(
         </div>
       </div>
       {isOpened &&
-        <div className='opened-content'>
-          <PersonControlBar />
+        <div className='person-card-opened-content'>
+          <PersonControlBar personID={personID} personName={personName} personEmail={personEmail} personPhone={personPhone} />
 
           <StyledTableContainer
             sx={{
@@ -105,9 +121,19 @@ function PersonCard(
               </TableHead>
               <TableBody>
                 {rows.map((row) => (
-                  <StyledTableRow key={row.name} sx={{}}>
+                  <StyledTableRow>
                     <StyledBodyTableCell>{row.name}</StyledBodyTableCell>
-                    <StyledBodyTableCell>{row.options}</StyledBodyTableCell>
+                    <StyledBodyTableCell>
+                      <div style={{ display: 'flex', justifyContent: 'left', gap: '0 8px' }}>
+                        <DeleteButton size='small' style={{ height: 32 }} onClick={() => {
+                          setTargetTeam({
+                            id: row.id, 
+                            name: row.name
+                          })
+                          handleShowRemovePersonFromTeam()
+                        }}>REMOVE</DeleteButton>
+                      </div>
+                    </StyledBodyTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>

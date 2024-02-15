@@ -17,17 +17,20 @@ import PanelFooter from '../../Panel/PanelFooter/PanelFooter'
 import GroupsIcon from '@mui/icons-material/Groups';
 
 // MUI
+import { Pagination } from '@mui/material'
 import AddButtonOutline from '../../CustomMUI/Buttons/AddButtons/AddButtonOutline'
 import FilterButtonOutline from '../../CustomMUI/Buttons/FilterButtons/FilterButtonOutline'
-import { Pagination } from '@mui/material'
+import PopupModal from '../../Popups/PopupModal'
+import PopupAddNewTeam from '../../Popups/PopupForms/Team/PopupAddNewTeam/PopupAddNewTeam'
 
 function TeamsPage() {
 
   const [filterText, setFilterText] = useState("")
+  
+  // Teams Pagination
+  const [TeamsPage, setTeamsPage] = useState(1)
   const [teamsPageCount, setTeamsPageCount] = useState(5)
 
-  // Teams Pagination
-  const [TeamsPage, setTeamsPage] = useState(0)
   const handleTeamsPageChange = (
     event: React.ChangeEvent<unknown>,
     newPage: number
@@ -35,10 +38,23 @@ function TeamsPage() {
     setTeamsPage(newPage)
   }
 
+  // Button Events
+  const [showAddTeam, setShowAddTeam] = useState(false)
+  const handleAddTeam = () => {
+    setShowAddTeam(prevState => !prevState)
+  }
+
   return (
     <PagePanel>
+
+      <PopupModal
+        open={showAddTeam}
+        onClose={handleAddTeam}
+      >
+        <PopupAddNewTeam />
+      </PopupModal>
+
       <PanelHeader>
-        {/* <h1>Teams List</h1> */}
         <GroupsIcon style={{ fontSize: '48px', color: palette.cardDarkColor }} />
         <div>
           <RoundedTextBar
@@ -48,7 +64,7 @@ function TeamsPage() {
           </RoundedTextBar>
           <FilterButton>FILTER</FilterButton>
         </div>
-        <AddButtonOutline>ADD TEAM</AddButtonOutline>
+        <AddButtonOutline onClick={handleAddTeam}>ADD TEAM</AddButtonOutline>
       </PanelHeader>
 
       <PanelBody>

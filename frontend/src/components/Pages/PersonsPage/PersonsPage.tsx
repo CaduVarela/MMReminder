@@ -20,14 +20,15 @@ import AddButtonOutline from '../../CustomMUI/Buttons/AddButtons/AddButtonOutlin
 import FilterButton from '../../CustomMUI/Buttons/FilterButtons/FilterButton'
 import FilterButtonOutline from '../../CustomMUI/Buttons/FilterButtons/FilterButtonOutline'
 import { Pagination } from '@mui/material'
-
+import PopupModal from '../../Popups/PopupModal'
+import PopupAddNewPerson from '../../Popups/PopupForms/Person/PopupAddNewPerson/PopupAddNewPerson'
 
 function PersonsPage() {
 
   const [filterText, setFilterText] = useState("")
 
   // Persons Pagination
-  const [personsPage, setPersonsPage] = useState(0)
+  const [personsPage, setPersonsPage] = useState(1)
   const [personsPageCount, setPersonsPageCount] = useState(5)
 
   const handlePersonsPageChange = (
@@ -37,10 +38,23 @@ function PersonsPage() {
     setPersonsPage(newPage)
   }
 
+  // Button Events
+  const [showAddPerson, setShowAddPerson] = useState(false)
+  const handleAddPerson = () => {
+    setShowAddPerson(prevState => !prevState)
+  }
+
   return (
     <PagePanel>
+
+      <PopupModal
+        open={showAddPerson}
+        onClose={handleAddPerson}
+      >
+        <PopupAddNewPerson />
+      </PopupModal>
+
       <PanelHeader>
-        {/* <h1>Teams List</h1> */}
         <PersonIcon style={{ fontSize: '48px', color: palette.cardDarkColor }} />
         <div>
           <RoundedTextBar
@@ -50,7 +64,7 @@ function PersonsPage() {
           </RoundedTextBar>
           <FilterButton>FILTER</FilterButton>
         </div>
-        <AddButtonOutline>ADD PERSON</AddButtonOutline>
+        <AddButtonOutline onClick={handleAddPerson}>ADD PERSON</AddButtonOutline>
       </PanelHeader>
 
       <PanelBody>

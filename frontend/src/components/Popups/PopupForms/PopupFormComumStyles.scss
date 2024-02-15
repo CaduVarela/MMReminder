@@ -1,0 +1,33 @@
+.content-wrapper {
+
+  h1 {
+    color: $cardDarkColor;
+    border-bottom: 1px solid rgba($darkColor, .3);
+    padding-bottom: 8px;
+    margin-bottom: 32px;
+  }
+
+  form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 32px 0;
+
+    &>* {
+      width: 100%;
+
+      &>* {
+        width: 100%;
+      }
+    }
+
+    .button-row {
+      position: static;
+      bottom: 32px;
+
+    }
+  }
+
+}

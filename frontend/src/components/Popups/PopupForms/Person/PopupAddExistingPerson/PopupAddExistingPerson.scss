@@ -1,0 +1,60 @@
+.content-wrapper {
+  .search-group {
+    display: flex;
+
+    align-items: center;
+
+    gap: 0 16px;
+
+    margin: 0;
+  }
+
+
+  .data-row {
+
+    width: 100%;
+    height: max-content;
+
+    background-color: $cardLightColor;
+    border-radius: 8px;
+
+    margin: 0 0 16px;
+
+    display: flex;
+
+    flex-direction: column;
+    flex-grow: 0;
+
+    justify-content: center;
+
+    color: $cardDarkColor;
+
+    cursor: pointer;
+
+    :hover {
+      filter: contrast(.8);
+    }
+
+    &>h1 {
+      font-size: 18px;
+      margin: 0;
+      padding: 16px 16px 5px 16px;
+      border: 0;
+      width: auto;
+    }
+
+    p {
+      font-size: 16px;
+      padding: 0 16px 16px 16px;
+      margin: 0;
+      width: auto;
+      height: 50%;
+    }
+
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: right;
+  }
+}

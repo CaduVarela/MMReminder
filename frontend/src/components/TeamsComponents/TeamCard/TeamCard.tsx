@@ -20,15 +20,18 @@ import StyledHeadTableCell from '../../CustomMUI/TableComponents/StyledHeadTable
 import StyledBodyTableCell from '../../CustomMUI/TableComponents/StyledBodyTableCell';
 import StyledTableRow from '../../CustomMUI/TableComponents/StyledTableRow';
 import StyledTablePagination from '../../CustomMUI/TableComponents/StyledTablePagination';
+import PopupModal from '../../Popups/PopupModal';
+import PopupRemovePersonFromTeam from '../../Popups/PopupForms/PopupRemovePersonFromTeam/PopupRemovePersonFromTeam';
+import PopupEditPerson from '../../Popups/PopupForms/Person/PopupEditPerson/PopupEditPerson';
 
 function TeamCard(
   {
-    id,
-    teamName
+    teamID,
+    teamName = ''
   }:
     {
-      id: number,
-      teamName?: string
+      teamID: number,
+      teamName: string
     }) {
 
 
@@ -37,25 +40,19 @@ function TeamCard(
 
   // Data Manipulation
   function createData(
+    id: number,
     name: string,
     email: string,
     phone: string,
-    options: React.ReactNode
   ) {
-    return { name, email, phone, options };
+    return { id, name, email, phone };
   }
 
-  const options = <div style={{ display: 'flex', justifyContent: 'space-around', gap: '0 8px' }}>
-    <EditButtonOutline size='small' style={{ height: 32 }}>EDIT</EditButtonOutline>
-    {/* <DeleteButton size='small' style={{ height: 32, padding: '0 6px 0 16px' }}></DeleteButton> */}
-    <DeleteButton size='small'style={{ height: 32 }}>DEL</DeleteButton>
-  </div>
-
   const rows = [
-    createData('Josezinho da Silva', 'josereidelas@gmail.com', '(42)12345-6789', options),
-    createData('Abelhijhonsson', 'abelhi@gmail.com', '(42)12345-6789', options),
-    createData('Josezinho da Silva', 'josereidelas@gmail.com', '(42)12345-6789', options),
-    createData('Josezinho da Silva', 'josereidelas@gmail.com', '(42)12345-6789', options),
+    createData(0, 'Josezinho da Silva', 'josereidelas@gmail.com', '(42)12345-6789'),
+    createData(1, 'Abelhijhonsson', 'abelhi@gmail.com', '(42)12345-6789'),
+    createData(2, 'Josezinho da Silva', 'josereidelas@gmail.com', '(42)12345-6789'),
+    createData(3, 'Josezinho da Silva', 'josereidelas@gmail.com', '(42)12345-6789'),
   ];
 
   // Table Manipulation
@@ -77,8 +74,40 @@ function TeamCard(
     setPage(0);
   }
 
+  // Popup
+  const [targetPerson, setTargetPerson] = useState({
+    id: -1,
+    name: '',
+    email: '',
+    phone: ''
+  })
+
+  const [showRemovePersonFromTeam, setShowRemovePersonFromTeam] = useState(false)
+  const handleShowRemovePersonFromTeam = () => {
+    setShowRemovePersonFromTeam(prevState => !prevState)
+  }
+
+  const [showEditPerson, setShowEditPerson] = useState(false)
+  const handleShowEditPerson = () => {
+    setShowEditPerson(prevState => !prevState)
+  }
+
   return (
     <>
+      <PopupModal
+        open={showRemovePersonFromTeam}
+        onClose={handleShowRemovePersonFromTeam}
+      >
+        <PopupRemovePersonFromTeam personID={targetPerson.id} personName={targetPerson.name} teamID={teamID} teamName={teamName} />
+      </PopupModal>
+
+      <PopupModal
+        open={showEditPerson}
+        onClose={handleShowEditPerson}
+      >
+        <PopupEditPerson personID={targetPerson.id} personName={targetPerson.name} personEmail={targetPerson.email} personPhone={targetPerson.phone}/>
+      </PopupModal>
+
       <div className='team-card' onClick={() => setIsOpened(!isOpened)}>
         <h1>{teamName}</h1>
         <div className='person-counter'>
@@ -87,8 +116,8 @@ function TeamCard(
         </div>
       </div>
       {isOpened &&
-        <div className='opened-content'>
-          <TeamControlBar />
+        <div className='team-card-opened-content'>
+          <TeamControlBar teamID={teamID} teamName={teamName} />
 
           <StyledTableContainer
             sx={{
@@ -106,11 +135,32 @@ function TeamCard(
               </TableHead>
               <TableBody>
                 {rows.map((row) => (
-                  <StyledTableRow key={row.name} sx={{}}>
+                  <StyledTableRow>
                     <StyledBodyTableCell>{row.name}</StyledBodyTableCell>
                     <StyledBodyTableCell>{row.email}</StyledBodyTableCell>
                     <StyledBodyTableCell>{row.phone}</StyledBodyTableCell>
-                    <StyledBodyTableCell>{row.options}</StyledBodyTableCell>
+                    <StyledBodyTableCell>
+                      <div style={{ display: 'flex', justifyContent: 'space-around', gap: '0 8px' }}>
+                        <EditButtonOutline size='small' style={{ height: 32 }} onClick={() => {
+                          setTargetPerson({
+                            id: row.id, 
+                            name: row.name,
+                            email: row.email,
+                            phone: row.phone+'',
+                          })
+                          handleShowEditPerson()
+                        }}>EDIT</EditButtonOutline>
+                        <DeleteButton size='small' style={{ height: 32 }} onClick={() => {
+                          setTargetPerson({
+                            id: row.id, 
+                            name: row.name,
+                            email: row.email,
+                            phone: row.phone+''
+                          })
+                          handleShowRemovePersonFromTeam()
+                        }}>DEL</DeleteButton>
+                      </div>
+                    </StyledBodyTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
