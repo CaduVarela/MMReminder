@@ -1,15 +1,12 @@
 import './TeamControlBar.scss'
 
 // Buttons & Input
-import AddButton from '../../CustomMUI/Buttons/AddButtons/AddButton'
 import AddButtonOutline from '../../CustomMUI/Buttons/AddButtons/AddButtonOutline'
 
 import DeleteButton from '../../CustomMUI/Buttons/DeleteButtons/DeleteButton'
 
-import EditButton from '../../CustomMUI/Buttons/EditButtons/EditButton'
 import EditButtonOutline from '../../CustomMUI/Buttons/EditButtons/EditButtonOutline'
 
-import FilterButton from '../../CustomMUI/Buttons/FilterButtons/FilterButton'
 import FilterButtonOutline from '../../CustomMUI/Buttons/FilterButtons/FilterButtonOutline'
 
 import RoundedTextBar from '../../CustomMUI/RoundedTextBar'

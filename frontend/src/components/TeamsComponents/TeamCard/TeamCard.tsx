@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import './TeamCard.scss'
-import palette from '@assets/styles/palette.module.scss';
 
 import PersonIcon from '@mui/icons-material/Person';
 import TeamControlBar from '../TeamControlBar/TeamControlBar';
