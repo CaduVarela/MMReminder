@@ -3,7 +3,7 @@ import './PersonsPage.scss'
 import { useEffect, useState } from 'react'
 import palette from '@assets/styles/palette.module.scss'
 
-import { useQuery } from '@tanstack/react-query' 
+import { useQuery } from '@tanstack/react-query'
 import { PersonType } from '@/assets/types/BackendTypes'
 
 // MUI
@@ -26,6 +26,7 @@ import PagePanel from '@/components/Panel/PagePanel/PagePanel';
 import PanelBody from '@/components/Panel/PanelBody/PanelBody';
 import PanelFooter from '@/components/Panel/PanelFooter/PanelFooter';
 import PersonCard from '@/components/PersonComponents/PersonCard/PersonCard';
+import RefreshButtonOutline from '@/components/CustomMUI/Buttons/RefreshButtons/RefreshButtonOutline'
 
 function PersonsPage() {
 
@@ -50,8 +51,8 @@ function PersonsPage() {
   }
 
   // Data Fetch
-  const { data: persons, isLoading, refetch } = useQuery({
-    queryKey: ["teams", page],
+  const { data: persons, isLoading, refetch, isSuccess } = useQuery({
+    queryKey: ["persons", page],
     queryFn: async () => {
       return await fetch(`http://localhost:3000/api/person?page=${page - 1}&take=${rowsPerPage}&name=${filterText}`)
         .then((res) => res.json())
@@ -61,7 +62,7 @@ function PersonsPage() {
   useEffect(() => {
     if (isLoading === false)
       setPageCount(Math.ceil(persons.pagination.count / rowsPerPage))
-  }, [persons?.pagination.count])
+  }, [isSuccess])
 
   return (
     <>
@@ -70,7 +71,7 @@ function PersonsPage() {
         onClose={handleShowAddPerson}
       >
         <>
-          <PopupAddNewPerson handleClose={handleShowAddPerson}/>
+          <PopupAddNewPerson handleClose={handleShowAddPerson} />
         </>
       </PopupModal>
 
@@ -86,6 +87,7 @@ function PersonsPage() {
             </RoundedTextBar>
             <FilterButton onClick={() => refetch()}>FILTER</FilterButton>
           </div>
+          <RefreshButtonOutline onClick={() => refetch()} >REFRESH</RefreshButtonOutline>
           <AddButtonOutline onClick={handleShowAddPerson}>ADD PERSON</AddButtonOutline>
         </PanelHeader>
 
@@ -95,8 +97,8 @@ function PersonsPage() {
               key={person.id}
               person={person}
             />
-          )) : isLoading ? <div className='full-center'> <StyledCircularProgress /> </div>
-            : <h1 className='no-teams-registered'> No persons registered yet...</h1>}
+          )) : isLoading && <div className='full-center'> <StyledCircularProgress /> </div>}
+          {persons?.pagination.count <= 0 && <h1 className='no-persons-registered'> No persons found...</h1>}
         </PanelBody>
 
         <PanelFooter>

@@ -10,7 +10,7 @@ const initialState = {
   tab: "teams"
 } as stateType
 
-export const tabSlice = createSlice({
+export const slice = createSlice({
   name: "tab",
   initialState,
   reducers: {
@@ -21,6 +21,6 @@ export const tabSlice = createSlice({
   }
 })
 
-export const { changeTab } = tabSlice.actions
+export const { changeTab } = slice.actions
 
-export default tabSlice.reducer
+export default slice.reducer

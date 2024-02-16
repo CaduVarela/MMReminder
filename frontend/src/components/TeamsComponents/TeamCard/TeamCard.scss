@@ -49,6 +49,24 @@ $teamCardInternalPadding: 32px;
     font-weight: bold;
   }
 
+  @keyframes enter {
+    0% {
+      filter: opacity(0);
+      transform: translateY(100%);
+    }
+
+    60% {
+      filter: opacity(.4);
+    }
+
+    100% {
+      filter: opacity(1);
+      transform: translateY(0);
+    }
+  }
+
+  animation: enter .2s ease-out;
+
 }
 
 .team-card-opened-content {
@@ -58,15 +76,15 @@ $teamCardInternalPadding: 32px;
       filter: opacity(0);
       transform: translateY(-25%) scaleY(.69);
     }
-  
+
     50% {
       filter: opacity(.4);
     }
-  
+
     85% {
       filter: opacity(1);
     }
-  
+
     100% {
       transform: translateY(0) scaleY(1);
     }
@@ -74,7 +92,7 @@ $teamCardInternalPadding: 32px;
 
   z-index: 2;
   animation: slideDown .2s ease-out;
- 
+
   .no-persons-yet {
     font-size: 21px;
 

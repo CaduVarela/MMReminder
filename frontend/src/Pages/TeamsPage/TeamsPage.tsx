@@ -26,6 +26,8 @@ import PanelBody from '@/components/Panel/PanelBody/PanelBody';
 import PanelFooter from '@/components/Panel/PanelFooter/PanelFooter';
 import PanelHeader from '@/components/Panel/PanelHeader/PanelHeader';
 import TeamCard from '@/components/TeamsComponents/TeamCard/TeamCard';
+import RefreshButtonOutline from '@/components/CustomMUI/Buttons/RefreshButtons/RefreshButtonOutline'
+import RefreshButton from '@/components/CustomMUI/Buttons/RefreshButtons/RefreshButton'
 
 function TeamsPage() {
 
@@ -50,7 +52,7 @@ function TeamsPage() {
   }
 
   // Data Fetch
-  const { data: teams, isLoading, refetch } = useQuery({
+  const { data: teams, isLoading, refetch, isSuccess } = useQuery({
     queryKey: ["teams", page],
     queryFn: async () => {
       return await fetch(`http://localhost:3000/api/team?page=${page - 1}&take=${rowsPerPage}&name=${filterText}`)
@@ -61,7 +63,7 @@ function TeamsPage() {
   useEffect(() => {
     if (isLoading === false)
       setPageCount(Math.ceil(teams.pagination.count / rowsPerPage))
-  }, [teams])
+  }, [isSuccess])
 
   return (
     <>
@@ -70,7 +72,7 @@ function TeamsPage() {
         onClose={handleShowAddTeam}
       >
         <>
-          <PopupAddNewTeam handleClose={handleShowAddTeam}/>
+          <PopupAddNewTeam handleClose={handleShowAddTeam} />
         </>
       </PopupModal>
 
@@ -86,17 +88,19 @@ function TeamsPage() {
             </RoundedTextBar>
             <FilterButton onClick={() => refetch()}>FILTER</FilterButton>
           </div>
+          <RefreshButtonOutline onClick={() => refetch()} >REFRESH</RefreshButtonOutline>
           <AddButtonOutline onClick={handleShowAddTeam}>ADD TEAM</AddButtonOutline>
         </PanelHeader>
 
-        <PanelBody>
-          {teams ? teams.data.map((team : TeamType) => (
+        <PanelBody key={teams}>
+          {teams?.data.map((team: TeamType) => (
             <TeamCard
-              key={team.id}
+              key={team.id + team.name}
               team={team}
             />
-          )) : isLoading ? <div className='full-center'> <StyledCircularProgress /> </div>
-           : <h1 className='no-teams-registered'> No teams registered yet...</h1>}
+          ))}
+          {isLoading && <div className='full-center'> <StyledCircularProgress /> </div>}
+          {teams?.pagination.count <= 0 && <h1 className='no-teams-registered'> No teams found...</h1>}
         </PanelBody>
 
         <PanelFooter>

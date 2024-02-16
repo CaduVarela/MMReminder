@@ -20,7 +20,7 @@ function PopupRemovePersonFromTeam(
   }) {
 
   const personMutation = useMutation({
-    mutationKey: ["delete-person"],
+    mutationKey: ["remove-person-from-team"],
     mutationFn: async () => {
       return await fetch(`http://localhost:3000/api/person/${person.id}`, {
         method: 'PUT',
@@ -42,8 +42,6 @@ function PopupRemovePersonFromTeam(
     event.preventDefault()
 
     personMutation.mutate()
-
-    queryClient.resetQueries()
 
     handleClose()
   }

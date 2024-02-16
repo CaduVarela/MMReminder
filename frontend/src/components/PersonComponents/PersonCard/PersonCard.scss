@@ -64,6 +64,23 @@ $teamCardInternalPadding: 32px;
     font-weight: bold;
   }
   
+  @keyframes enter {
+    0% {
+      filter: opacity(0);
+      transform: translateY(100%);
+    }
+
+    60% {
+      filter: opacity(.4);
+    }
+
+    100% {
+      filter: opacity(1);
+      transform: translateY(0);
+    }
+  }
+
+  animation: enter .2s ease-out;
 }
 
 .person-card-opened-content {

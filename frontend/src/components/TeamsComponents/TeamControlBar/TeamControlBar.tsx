@@ -17,7 +17,15 @@ import PopupDeleteTeam from '../../Popups/PopupForms/Team/PopupDeleteTeam/PopupD
 import PopupEditTeam from '../../Popups/PopupForms/Team/PopupEditTeam/PopupEditTeam'
 import { TeamType } from '@assets/types/BackendTypes'
 
-function TeamControlBar({ team }: { team: TeamType }) {
+function TeamControlBar({
+  team,
+  handleFilterChange
+}: {
+  team: TeamType,
+  handleFilterChange: Function
+}) {
+
+  const [filterText, setFilterText] = useState('')
 
   const buttonHeight = '40px';
 
@@ -44,7 +52,7 @@ function TeamControlBar({ team }: { team: TeamType }) {
         onClose={handleAddExistingPerson}
       >
         <>
-          <PopupAddExistingPerson team={team} handleClose={handleAddExistingPerson}/>
+          <PopupAddExistingPerson team={team} handleClose={handleAddExistingPerson} />
         </>
       </PopupModal>
 
@@ -67,10 +75,18 @@ function TeamControlBar({ team }: { team: TeamType }) {
       </PopupModal>
 
       <div className='team-control-bar'>
-        <div>
-          <RoundedTextBar placeholder='Filter by Person Name' style={{ marginRight: '8px', height: buttonHeight }}></RoundedTextBar>
-          <FilterButtonOutline style={{ height: buttonHeight }}>FILTER</FilterButtonOutline>
-        </div>
+        {/* <div>
+          <RoundedTextBar
+            placeholder='Filter by Person Name'
+            style={{ marginRight: '8px', height: buttonHeight }}
+            onChange={(e) => setFilterText(e.target.value)}
+            value={filterText}
+          ></RoundedTextBar>
+          <FilterButtonOutline
+            style={{ height: buttonHeight }}
+            onClick={(e) => handleFilterChange(e, filterText)}
+          >FILTER</FilterButtonOutline>
+        </div> */}
         <AddButtonOutline style={{ height: buttonHeight }} onClick={handleAddExistingPerson}>ADD PERSON</AddButtonOutline>
         <EditButtonOutline style={{ height: buttonHeight }} onClick={handleShowEditTeam}>EDIT TEAM</EditButtonOutline>
         <DeleteButton style={{ height: buttonHeight }} onClick={handleShowDeleteTeam}>DELETE TEAM</DeleteButton>

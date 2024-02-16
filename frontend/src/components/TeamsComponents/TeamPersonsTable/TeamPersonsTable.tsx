@@ -43,6 +43,7 @@ function TeamPersonsTable({ team }: { team: TeamType }) {
 
   // Data Manipulation
   const [rows, setRows] = useState<PersonType[]>([]);
+  const [key, setKey] = useState('')
 
   function refreshRows(page: number, rowsPerPage: number) {
     let newRows: PersonType[] = []
@@ -102,12 +103,12 @@ function TeamPersonsTable({ team }: { team: TeamType }) {
         onClose={handleShowEditPerson}
       >
         <>
-          <PopupEditPerson person={targetPerson} />
+          <PopupEditPerson person={targetPerson} handleClose={handleShowEditPerson} />
         </>
       </PopupModal>
 
       <StyledTableContainer
-        key={rows.length}
+        key={team.id}
         sx={{
           width: '95%',
           margin: '8px auto 0',
@@ -118,12 +119,12 @@ function TeamPersonsTable({ team }: { team: TeamType }) {
               <StyledHeadTableCell>Name</StyledHeadTableCell>
               <StyledHeadTableCell>Email</StyledHeadTableCell>
               <StyledHeadTableCell>Phone</StyledHeadTableCell>
-              <StyledHeadTableCell>Options</StyledHeadTableCell>
+              <StyledHeadTableCell style={{ width: '16%' }}>Options</StyledHeadTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((person) => (
-              <StyledTableRow key={person.id}>
+              <StyledTableRow key={person.id + person.name + person.email + person.phone as string}>
                 <StyledBodyTableCell>{person.name}</StyledBodyTableCell>
                 <StyledBodyTableCell>{person.email}</StyledBodyTableCell>
                 <StyledBodyTableCell>{person.phone}</StyledBodyTableCell>
@@ -131,19 +132,19 @@ function TeamPersonsTable({ team }: { team: TeamType }) {
                 {person.name !== '' ?
 
                   <StyledBodyTableCell>
-                    <div style={{ display: 'flex', justifyContent: 'space-around', gap: '0 8px' }}>
-                      <EditButtonOutline size='small' style={{ height: 32 }} onClick={() => {
+                    <div style={{ display: 'flex', justifyContent: 'left', gap: '0 8px' }}>
+                      {/* <EditButtonOutline size='small' style={{ height: 32 }} onClick={() => {
                         setTargetPerson(person)
                         handleShowEditPerson()
-                      }}>EDIT</EditButtonOutline>
+                      }}>EDIT</EditButtonOutline> */}
                       <DeleteButton size='small' style={{ height: 32 }} onClick={() => {
                         setTargetPerson(person)
                         handleShowRemovePersonFromTeam()
-                      }}>DEL</DeleteButton>
+                      }}>REMOVE</DeleteButton>
                     </div>
                   </StyledBodyTableCell>
-                
-                : <StyledBodyTableCell></StyledBodyTableCell>}
+
+                  : <StyledBodyTableCell></StyledBodyTableCell>}
               </StyledTableRow>
             ))}
 

@@ -10,7 +10,7 @@ GET http://localhost:3000/api/team HTTP/1.1
 content-type: application/json
 
 ###### 
-@target = 1
+@target = 24
 
 GET http://localhost:3000/api/team/{{target}} HTTP/1.1
 content-type: application/json
@@ -24,9 +24,5 @@ PUT http://localhost:3000/api/team/{{target}} HTTP/1.1
 content-type: application/json
 
 {
-  "name": "teste",
-  
-  "$connect": {
-    "persons": [ 1 ]
-  }
+  "name": "teste"
 }

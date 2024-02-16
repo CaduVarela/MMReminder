@@ -16,6 +16,7 @@ import PopupAddExistingTeam from '../../Popups/PopupForms/Team/PopupAddExistingT
 import PopupDeletePerson from '../../Popups/PopupForms/Person/PopupDeletePerson/PopupDeletePerson'
 import PopupEditPerson from '../../Popups/PopupForms/Person/PopupEditPerson/PopupEditPerson'
 import { PersonType } from '@/assets/types/BackendTypes'
+import RefreshButtonOutline from '@/components/CustomMUI/Buttons/RefreshButtons/RefreshButtonOutline'
 
 function PersonControlBar({ person }: { person: PersonType }) {
 
@@ -62,15 +63,15 @@ function PersonControlBar({ person }: { person: PersonType }) {
         onClose={handleShowEditPerson}
       >
         <>
-          <PopupEditPerson person={person} />
+          <PopupEditPerson person={person} handleClose={handleShowEditPerson} />
         </>
       </PopupModal>
 
       <div className='person-control-bar'>
-        <div>
+        {/* <div>
           <RoundedTextBar placeholder='Filter by Team Name' style={{ marginRight: '8px', height: buttonHeight }}></RoundedTextBar>
           <FilterButtonOutline style={{ height: buttonHeight }}>FILTER</FilterButtonOutline>
-        </div>
+        </div> */}
         <AddButtonOutline style={{ height: buttonHeight }} onClick={handleAddExistingTeam}>ADD TEAM</AddButtonOutline>
         <EditButtonOutline style={{ height: buttonHeight }} onClick={handleShowEditPerson}>EDIT PERSON</EditButtonOutline>
         <DeleteButton style={{ height: buttonHeight }} onClick={handleShowDeletePerson}>DELETE PERSON</DeleteButton>

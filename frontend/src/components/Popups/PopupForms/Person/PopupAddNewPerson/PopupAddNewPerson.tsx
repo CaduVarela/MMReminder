@@ -11,6 +11,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import IMask, { InputMaskElement } from 'imask'
 import { ZodError, z } from 'zod'
 import validator from 'validator'
+import { PersonType } from '@/assets/types/BackendTypes'
 
 function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
 
@@ -22,46 +23,69 @@ function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
   const [emailError, setEmailError] = useState(false)
   const [phoneError, setPhoneError] = useState(false)
 
+  const phoneSchema = z.string().min(11).refine(
+    (value) => validator.isMobilePhone(value, 'pt-BR'),
+    {
+      message: "Invalid phone number"
+    }
+  ).optional()
+
   const zodSchema = z.object({
     name: z.string().trim().min(1),
     email: z.string().trim().email(),
-    phone: z.string().min(11).refine(
-      (value) => validator.isMobilePhone(value, 'pt-BR'),
-      {
-        message: "Invalid phone number"
-      }
-    ).optional(),
+    phone: phoneSchema
   }).strict()
-
+  
   function validateFields(): boolean {
     try {
-      zodSchema.parse({
-        name,
-        email,
-        phone
-      })
+      if (phone.length > 0)
+      zodSchema.parse({ name, email, phone })
+      else
+        zodSchema.parse({ name, email })
+
       return true
     } catch (err: any) {
       if (err instanceof ZodError) {
         // console.log(err.errors)
-        err.errors.forEach((err) => {
-          console.log(err.message)
+        const flatten = err.flatten()
+        console.log(err.flatten())
+
+        setNameError(false)
+        setEmailError(false)
+        setPhoneError(false)
+
+        Object.entries(flatten.fieldErrors).forEach((key) => {
+          switch (key[0]) {
+            case 'name':
+              setNameError(true)
+              console.log('1')
+              break;
+            case 'email':
+              setEmailError(true)
+              console.log('2')
+              break;
+            case 'phone':
+              setPhoneError(true)
+              console.log('3')
+              break;
+          }
         })
+
+
       }
 
       return false
     }
   }
 
+  let newPerson: PersonType
   const personMutation = useMutation({
     mutationKey: ["new-person"],
     mutationFn: async () => {
       return await fetch('http://localhost:3000/api/person', {
         method: 'POST',
         body: JSON.stringify({
-          name,
-          email,
-          phone
+          ...newPerson
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -79,20 +103,24 @@ function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
     )
   }, [])
 
-
   const queryClient = useQueryClient()
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    if (!validateFields()) {
-      return
-    }
+    if (!validateFields()) { return }
+
+    if (phone.length < 1)
+      newPerson = { name, email } as PersonType
+    else
+      newPerson = { name, email, phone } as PersonType
 
     personMutation.mutate()
 
     queryClient.resetQueries()
-
+    queryClient.invalidateQueries({
+      refetchType: 'all'
+    })
     handleClose()
   }
 
@@ -110,7 +138,7 @@ function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
               placeholder='person name'
               error={nameError}
               required
-              onChange={(e) => {setName(e.target.value); setNameError(false)}}
+              onChange={(e) => { setName(e.target.value) }}
             ></StyledInputField>
           </div>
           <div className='person-email-group'>
@@ -119,9 +147,9 @@ function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
               id='person-email-field'
               placeholder='person email'
               type='email'
-              error={nameError}
+              error={emailError}
               required
-              onChange={(e) => {setEmail(e.target.value); setEmailError(false)}}
+              onChange={(e) => { setEmail(e.target.value) }}
             ></StyledInputField>
           </div>
           <div className='person-phone-group'>
@@ -130,7 +158,7 @@ function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
               id='person-phone-field'
               placeholder='person phone'
               error={phoneError}
-              onChange={(e) => { setPhone(e.target.value); setPhoneError(false) }}
+              onChange={(e) => { setPhone(e.target.value) }}
             ></StyledInputField>
           </div>
           <div className='button-row'>

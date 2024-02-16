@@ -34,6 +34,8 @@ function PopupAddExistingPerson({ team, handleClose }: { team: TeamType, handleC
     setFilterText(event.target.value)
   }
 
+  
+
   const teamMutation = useMutation({
     mutationKey: ["add-person-to-team"],
     mutationFn: async () => {
@@ -41,7 +43,7 @@ function PopupAddExistingPerson({ team, handleClose }: { team: TeamType, handleC
         method: 'PUT',
         body: JSON.stringify({
           "$connect": {
-            persons: [ selectedPerson.id ]
+            persons: [selectedPerson.id]
           }
         }),
         headers: {
@@ -51,15 +53,12 @@ function PopupAddExistingPerson({ team, handleClose }: { team: TeamType, handleC
     }
   })
 
-  const queryClient = useQueryClient()
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     teamMutation.mutate()
 
-    queryClient.resetQueries()
-
+    // queryClient.resetQueries()
     handleClose()
   }
 
@@ -76,7 +75,6 @@ function PopupAddExistingPerson({ team, handleClose }: { team: TeamType, handleC
     if (isLoading === false)
       setPageCount(Math.ceil(persons.pagination.count / rowsPerPage))
   }, [persons?.pagination.count])
-
 
   return (
     <PopupBox>

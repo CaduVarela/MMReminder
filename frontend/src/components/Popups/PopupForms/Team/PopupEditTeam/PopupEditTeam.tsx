@@ -34,7 +34,7 @@ function PopupEditTeam({ team, handleClose }: { team: TeamType, handleClose: Fun
   }
 
   const teamMutation = useMutation({
-    mutationKey: ["new-team"],
+    mutationKey: ["update-team"],
     mutationFn: async () => {
       return await fetch(`http://localhost:3000/api/team/${team.id}`, {
         method: 'PUT',
@@ -57,11 +57,10 @@ function PopupEditTeam({ team, handleClose }: { team: TeamType, handleClose: Fun
       setNameError(true)
       return
     }
-
-    queryClient.resetQueries()
-
+    
     teamMutation.mutate()
-
+    
+    queryClient.resetQueries()
     handleClose()
   }
 
