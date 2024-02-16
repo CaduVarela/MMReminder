@@ -15,19 +15,9 @@ import { useState } from 'react'
 import PopupAddExistingTeam from '../../Popups/PopupForms/Team/PopupAddExistingTeam/PopupAddExistingTeam'
 import PopupDeletePerson from '../../Popups/PopupForms/Person/PopupDeletePerson/PopupDeletePerson'
 import PopupEditPerson from '../../Popups/PopupForms/Person/PopupEditPerson/PopupEditPerson'
+import { PersonType } from '@/assets/types/BackendTypes'
 
-function PersonControlBar(
-  {
-    personID,
-    personName,
-    personEmail,
-    personPhone
-  }: {
-    personID: number,
-    personName: string,
-    personEmail: string,
-    personPhone?: string,
-  }) {
+function PersonControlBar({ person }: { person: PersonType }) {
 
   const buttonHeight = '40px';
 
@@ -54,7 +44,7 @@ function PersonControlBar(
         onClose={handleAddExistingTeam}
       >
         <>
-          <PopupAddExistingTeam />
+          <PopupAddExistingTeam person={person} handleClose={handleAddExistingTeam}/>
         </>
       </PopupModal>
 
@@ -63,7 +53,7 @@ function PersonControlBar(
         onClose={handleShowDeletePerson}
       >
         <>
-          <PopupDeletePerson personID={personID} personName={personName} />
+          <PopupDeletePerson person={person} handleClose={handleShowDeletePerson} />
         </>
       </PopupModal>
 
@@ -72,7 +62,7 @@ function PersonControlBar(
         onClose={handleShowEditPerson}
       >
         <>
-          <PopupEditPerson personID={personID} personName={personName} personEmail={personEmail} personPhone={personPhone} />
+          <PopupEditPerson person={person} />
         </>
       </PopupModal>
 

@@ -63,11 +63,8 @@ $teamCardInternalPadding: 32px;
     font-size: 24px;
     font-weight: bold;
   }
-
   
 }
-
-
 
 .person-card-opened-content {
 
@@ -93,4 +90,21 @@ $teamCardInternalPadding: 32px;
   z-index: 2;
   animation: slideDown .2s ease-out;
 
+  .no-teams-yet {
+    font-size: 21px;
+
+    width: calc(95% - 16px * 2);
+    padding: 16px;
+
+    margin: 8px auto 0;
+
+    background-color: $cardLightColor;
+    border: 1px solid $lightColorShade;
+    border-radius: 8px;
+
+    display: flex;
+    justify-content: center;
+
+    color: $cardDarkColor;
+  }
 }

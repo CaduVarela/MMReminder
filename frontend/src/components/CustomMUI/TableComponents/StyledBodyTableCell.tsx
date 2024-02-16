@@ -7,6 +7,7 @@ const StyledBodyTableCell = styled(TableCell)({
   fontWeight: 'medium',
   fontSize: '16px',
   color: palette.cardDarkColor,
+  height: '32px'
 })
 
 export default StyledBodyTableCell

@@ -1,7 +1,7 @@
 import './../../PopupFormComumStyles.scss'
 import './PopupEditTeam.scss'
 
-import { FormEvent } from 'react'
+import { FormEvent, useState } from 'react'
 
 import { InputLabel } from '@mui/material'
 import StyledInputField from '../../../../CustomMUI/StyledInputField'
@@ -10,12 +10,59 @@ import EditButton from '../../../../CustomMUI/Buttons/EditButtons/EditButton'
 
 import SaveIcon from '@mui/icons-material/Save';
 
-function PopupEditTeam({ teamID, teamName }: { teamID: number, teamName: string }) {
+import { TeamType } from '@assets/types/BackendTypes'
+import { z } from 'zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+
+function PopupEditTeam({ team, handleClose }: { team: TeamType, handleClose: Function }) {
+
+  const [name, setName] = useState('')
+
+  const [nameError, setNameError] = useState(false)
+
+  const zodSchema = z.string().trim().min(1)
+
+  function validateFields(): boolean {
+    try {
+      zodSchema.parse(name)
+      return true
+    } catch (err) {
+      console.log(err)
+      return false
+    }
+
+  }
+
+  const teamMutation = useMutation({
+    mutationKey: ["new-team"],
+    mutationFn: async () => {
+      return await fetch(`http://localhost:3000/api/team/${team.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          name: name,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+    }
+  })
+
+  const queryClient = useQueryClient()
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    // @todo: code proper action
+    if (!validateFields()) {
+      setNameError(true)
+      return
+    }
+
+    queryClient.resetQueries()
+
+    teamMutation.mutate()
+
+    handleClose()
   }
 
   return (
@@ -25,12 +72,17 @@ function PopupEditTeam({ teamID, teamName }: { teamID: number, teamName: string 
           Edit Team
         </h1>
         <p>
-          You are updating <span className='edit-color'>{teamName}</span>.
+          You are updating <span className='edit-color'>{team.name}</span>.
         </p>
         <form className='form' onSubmit={handleSubmit}>
           <div className='team-name-group'>
             <InputLabel htmlFor='team-name-field'>Team Name</InputLabel>
-            <StyledInputField id='team-name-field' required defaultValue={teamName}></StyledInputField>
+            <StyledInputField
+              id='team-name-field'
+              required defaultValue={team.name}
+              onChange={(e) => setName(e.target.value)}
+              error={nameError}
+            ></StyledInputField>
           </div>
           <div className='button-row'>
             <EditButton startIcon={<SaveIcon />} type='submit'>SAVE CHANGES</EditButton>

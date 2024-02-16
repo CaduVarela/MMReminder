@@ -1,10 +1,10 @@
 import './App.scss'
 
-// import { useState } from 'react'
+// Pages
+import TeamsPage from './Pages/TeamsPage/TeamsPage'
+import PersonsPage from './Pages/PersonsPage/PersonsPage'
 
 // Components
-import TeamsPage from './components/Pages/TeamsPage/TeamsPage'
-import PersonsPage from './components/Pages/PersonsPage/PersonsPage'
 import SiteHeader from './components/SiteMainComponents/SiteHeader/SiteHeader'
 import SiteBody from './components/SiteMainComponents/SiteBody/SiteBody'
 
@@ -12,25 +12,20 @@ import SiteBody from './components/SiteMainComponents/SiteBody/SiteBody'
 import { useSelector } from 'react-redux'
 import { stateType } from './store/slice'
 
-// Palette
-// import palette from './assets/styles/palette.module.scss'
-
-
-
 function App() {
 
   const tab = useSelector((state: stateType) => state.tab.tab)
 
   return (
     <main>
-      <SiteHeader />
+        <SiteHeader />
 
-      <div className='background'></div>
+        <div className='background'></div>
+          <SiteBody>
+            {tab === "teams" && <TeamsPage />}
+            {tab === "persons" && <PersonsPage />}
+          </SiteBody>
 
-      <SiteBody>
-        {tab === "teams" && <TeamsPage />}
-        {tab === "persons" && <PersonsPage />}
-      </SiteBody>
     </main>
   )
 }

@@ -1,24 +1,7 @@
+import { Prisma, PrismaClient } from "@prisma/client";
 import { RequestHandler } from "express";
 import { ZodSchema, z } from "zod";
-
-export function zodValidate(zodSchema: ZodSchema<any>): RequestHandler {
-  return (req, res, next) => {
-    try {
-      const data = zodSchema.parse({
-        body: req.body,
-        params: req.params,
-        query: req.query,
-      })
-      next()
-    } catch (err: any) {
-      if (err instanceof z.ZodError) {
-        res.status(400).json(err.issues)
-        return
-      }
-
-    }
-  }
-}
+const prisma = new PrismaClient()
 
 export function prismaCreate(model: any): RequestHandler {
   return async (req, res) => {
@@ -165,17 +148,52 @@ export function prismaFindMany(model: any, prismaIncludeConfig?: Object): Reques
       const page = Number(req.query.page) || 0
       const take = Number(req.query.take) || 10
 
+      const whereName = req.query.name
+
       const FindMany = model.findMany.bind(model)
+      const Count = model.count.bind(model)
 
-      const response = await FindMany(
-        {
-          include: prismaIncludeConfig,
-          skip: page > 0 ? ((page * take) + 1) : 0,
-          take: take
-        }
-      )
+      // const response = await FindMany(
+      //   {
+      //     where: {
+      //       name: {
+      //         contains: whereName
+      //       }
+      //     },
+      //     include: prismaIncludeConfig,
+      //     skip: page > 0 ? ((page * take) + 1) : 0,
+      //     take: take
+      //   }
+      // )
 
-      res.status(200).json(response)
+      const [data, count] = await prisma.$transaction([
+        FindMany(
+          {
+            where: {
+              name: {
+                contains: whereName
+              }
+            },
+            include: prismaIncludeConfig,
+            skip: page > 0 ? (page * take) : 0,
+            take: take
+          }
+        ),
+        Count({
+          where: {
+            name: {
+              contains: whereName
+            }
+          }
+        })
+      ])
+
+      res.status(200).json({
+        pagination: {
+          count
+        },
+        data
+      })
 
     } catch (err: any) {
 
@@ -214,7 +232,7 @@ export function prismaFindManySimpleFilter(model: any, prismaWhereConfig: Object
         {
           // where: { ...prismaWhereConfig },
           where: formatedWhereConfig,
-          include: prismaIncludeConfig ,
+          include: prismaIncludeConfig,
           skip: page > 0 ? ((page * take) + 1) : 0,
           take: take
         }

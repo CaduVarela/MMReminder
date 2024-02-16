@@ -15,7 +15,7 @@ const route = Router()
 const zodSchemaCreate = z.object({
   body: z.object({
     name: z.string(),
-    person: z.number().array().optional()
+    persons: z.number().array().optional()
   }).strict()
 })
 
@@ -24,13 +24,13 @@ const zodSchemaUpdate = z.object({
     name: z.string().optional(),
 
     $connect: z.object({
-      person: z.number().array().optional()
+      persons: z.number().array().optional()
     }).strict().optional(),
-    
+
     $disconnect: z.object({
-      person: z.number().array().optional()
+      persons: z.number().array().optional()
     }).strict().optional(),
-    
+
   }).strict()
 })
 
@@ -39,10 +39,10 @@ route.post('/',
   prismaCreate(model))
 
 route.get('/',
-  prismaFindMany(model))
+  prismaFindMany(model, { persons: true }))
 
 route.get('/:id',
-  prismaFindUnique(model, { person: true }))
+  prismaFindUnique(model, { persons: true }))
 
 route.put('/:id',
   zodValidate(zodSchemaUpdate),

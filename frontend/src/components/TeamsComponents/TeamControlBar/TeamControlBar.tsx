@@ -15,8 +15,9 @@ import { useState } from 'react'
 import PopupAddExistingPerson from '../../Popups/PopupForms/Person/PopupAddExistingPerson/PopupAddExistingPerson'
 import PopupDeleteTeam from '../../Popups/PopupForms/Team/PopupDeleteTeam/PopupDeleteTeam'
 import PopupEditTeam from '../../Popups/PopupForms/Team/PopupEditTeam/PopupEditTeam'
+import { TeamType } from '@assets/types/BackendTypes'
 
-function TeamControlBar({ teamID, teamName }: { teamID: number, teamName: string }) {
+function TeamControlBar({ team }: { team: TeamType }) {
 
   const buttonHeight = '40px';
 
@@ -26,7 +27,7 @@ function TeamControlBar({ teamID, teamName }: { teamID: number, teamName: string
     setShowAddPerson(prevState => !prevState)
   }
 
-  const [showShowDeleteTeam, setShowDeleteTeam] = useState(false)
+  const [showDeleteTeam, setShowDeleteTeam] = useState(false)
   const handleShowDeleteTeam = () => {
     setShowDeleteTeam(prevState => !prevState)
   }
@@ -43,16 +44,16 @@ function TeamControlBar({ teamID, teamName }: { teamID: number, teamName: string
         onClose={handleAddExistingPerson}
       >
         <>
-          <PopupAddExistingPerson />
+          <PopupAddExistingPerson team={team} handleClose={handleAddExistingPerson}/>
         </>
       </PopupModal>
 
       <PopupModal
-        open={showShowDeleteTeam}
+        open={showDeleteTeam}
         onClose={handleShowDeleteTeam}
       >
         <>
-          <PopupDeleteTeam teamID={teamID} teamName={teamName} />
+          <PopupDeleteTeam team={team} handleClose={handleShowDeleteTeam} />
         </>
       </PopupModal>
 
@@ -61,7 +62,7 @@ function TeamControlBar({ teamID, teamName }: { teamID: number, teamName: string
         onClose={handleShowEditTeam}
       >
         <>
-          <PopupEditTeam teamID={teamID} teamName={teamName} />
+          <PopupEditTeam team={team} handleClose={handleShowEditTeam} />
         </>
       </PopupModal>
 

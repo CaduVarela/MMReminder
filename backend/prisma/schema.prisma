@@ -2,32 +2,32 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["relationJoins"]
 }
 
 datasource db {
   provider = "sqlite"
   // url      = env("DATABASE_URL")
-  url = "file:./dev.db"
+  url      = "file:./dev.db"
 }
 
 model Person {
-  id        Int          @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
   email     String
   phone     String?
-  team      Team[]
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  teams     Team[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Team {
-  id        Int          @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
-  person    Person[]
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  persons   Person[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // model TeamPerson {
