@@ -9,6 +9,7 @@ import FilterButton from '../../../../CustomMUI/Buttons/FilterButtons/FilterButt
 import { Pagination } from '@mui/material'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { PersonType, TeamType } from '@/assets/types/BackendTypes'
+import StyledCircularProgress from '@/components/CustomMUI/StyledCircularProgress'
 
 function PopupAddExistingPerson({ team, handleClose }: { team: TeamType, handleClose: Function }) {
 
@@ -16,6 +17,8 @@ function PopupAddExistingPerson({ team, handleClose }: { team: TeamType, handleC
     name: '',
     email: '',
   } as PersonType)
+
+  const [rows, setRows] = useState()
 
   // Persons Pagination
   const [page, setPage] = useState(1)
@@ -89,7 +92,7 @@ function PopupAddExistingPerson({ team, handleClose }: { team: TeamType, handleC
         <form className='form' onSubmit={handleSubmit}>
           <div className='search-group'>
             <RoundedTextBar placeholder='Search person by name' onChange={handleFilterChange}></RoundedTextBar>
-            <FilterButton>SEARCH</FilterButton>
+            <FilterButton onClick={() => refetch()}>SEARCH</FilterButton>
           </div>
           <div>
             {persons?.data.map((person: PersonType) => (
@@ -98,6 +101,8 @@ function PopupAddExistingPerson({ team, handleClose }: { team: TeamType, handleC
                 <p>{person.email} {person.phone ? `| ${person.phone}` : ''}</p>
               </button>
             ))}
+            {isLoading && <div className='full-center'> <StyledCircularProgress /> </div>}
+            {persons?.pagination.count < 1 && <div className='full-center'>No teams found</div>}
           </div>
         </form>
         <div className='pagination'>

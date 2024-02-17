@@ -149,22 +149,10 @@ export function prismaFindMany(model: any, prismaIncludeConfig?: Object): Reques
       const take = Number(req.query.take) || 10
 
       const whereName = req.query.name
+      const notInclude = req.query.notInclude
 
       const FindMany = model.findMany.bind(model)
       const Count = model.count.bind(model)
-
-      // const response = await FindMany(
-      //   {
-      //     where: {
-      //       name: {
-      //         contains: whereName
-      //       }
-      //     },
-      //     include: prismaIncludeConfig,
-      //     skip: page > 0 ? ((page * take) + 1) : 0,
-      //     take: take
-      //   }
-      // )
 
       const [data, count] = await prisma.$transaction([
         FindMany(
@@ -174,7 +162,9 @@ export function prismaFindMany(model: any, prismaIncludeConfig?: Object): Reques
                 contains: whereName
               }
             },
-            include: prismaIncludeConfig,
+            include: { 
+              ...prismaIncludeConfig
+            },
             skip: page > 0 ? (page * take) : 0,
             take: take
           }
@@ -194,51 +184,6 @@ export function prismaFindMany(model: any, prismaIncludeConfig?: Object): Reques
         },
         data
       })
-
-    } catch (err: any) {
-
-      if (err.code === 'P2025') {
-        res.status(400).json({
-          "detail": "Entry not found!"
-        })
-        return
-      }
-
-      console.error(err)
-      res.status(400).json({ ...err })
-    }
-  }
-}
-
-export function prismaFindManySimpleFilter(model: any, prismaWhereConfig: Object = {}, prismaIncludeConfig?: Object): RequestHandler {
-  return async (req, res) => {
-    try {
-      const page = Number(req.query.page) || 0
-      const take = Number(req.query.take) || 10
-
-      const FindMany = model.findMany.bind(model)
-
-      let formatedWhereConfig = {}
-      Object.entries(prismaWhereConfig).forEach(([key, value]) => {
-        formatedWhereConfig = {
-          ...formatedWhereConfig,
-          [key]: {
-            [value]: req.body[key]
-          }
-        }
-      })
-
-      const response = await FindMany(
-        {
-          // where: { ...prismaWhereConfig },
-          where: formatedWhereConfig,
-          include: prismaIncludeConfig,
-          skip: page > 0 ? ((page * take) + 1) : 0,
-          take: take
-        }
-      )
-
-      res.status(200).json(response)
 
     } catch (err: any) {
 
