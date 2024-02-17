@@ -31,15 +31,15 @@ function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
   ).optional()
 
   const zodSchema = z.object({
-    name: z.string().trim().min(1),
-    email: z.string().trim().email(),
+    name: z.string().trim().min(1).max(40),
+    email: z.string().trim().min(1).max(40).email(),
     phone: phoneSchema
   }).strict()
-  
+
   function validateFields(): boolean {
     try {
       if (phone.length > 0)
-      zodSchema.parse({ name, email, phone })
+        zodSchema.parse({ name, email, phone })
       else
         zodSchema.parse({ name, email })
 
@@ -70,8 +70,6 @@ function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
               break;
           }
         })
-
-
       }
 
       return false
@@ -79,6 +77,9 @@ function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
   }
 
   let newPerson: PersonType
+
+  const queryClient = useQueryClient()
+
   const personMutation = useMutation({
     mutationKey: ["new-person"],
     mutationFn: async () => {
@@ -90,6 +91,11 @@ function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
         headers: {
           'Content-Type': 'application/json',
         },
+      })
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries({
+        queryKey: ["persons"]
       })
     }
   })
@@ -103,24 +109,18 @@ function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
     )
   }, [])
 
-  const queryClient = useQueryClient()
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     if (!validateFields()) { return }
 
     if (phone.length < 1)
-      newPerson = { name, email } as PersonType
+      newPerson = { name: name.trim(), email: email.trim() } as PersonType
     else
-      newPerson = { name, email, phone } as PersonType
+      newPerson = { name: name.trim(), email: email.trim(), phone: phone.trim() } as PersonType
 
     personMutation.mutate()
 
-    queryClient.resetQueries()
-    queryClient.invalidateQueries({
-      refetchType: 'all'
-    })
     handleClose()
   }
 
@@ -132,7 +132,7 @@ function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
         </h1>
         <form className='form' onSubmit={handleSubmit}>
           <div className='person-name-group'>
-            <InputLabel htmlFor='person-name-field'>Person Name</InputLabel>
+            <InputLabel htmlFor='person-name-field'>Name</InputLabel>
             <StyledInputField
               id='person-name-field'
               placeholder='person name'
@@ -142,7 +142,7 @@ function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
             ></StyledInputField>
           </div>
           <div className='person-email-group'>
-            <InputLabel htmlFor='person-email-field'>Person Email</InputLabel>
+            <InputLabel htmlFor='person-email-field'>Email</InputLabel>
             <StyledInputField
               id='person-email-field'
               placeholder='person email'
@@ -153,7 +153,7 @@ function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
             ></StyledInputField>
           </div>
           <div className='person-phone-group'>
-            <InputLabel htmlFor='person-phone-field'>Person Phone</InputLabel>
+            <InputLabel htmlFor='person-phone-field'>Phone</InputLabel>
             <StyledInputField
               id='person-phone-field'
               placeholder='person phone'

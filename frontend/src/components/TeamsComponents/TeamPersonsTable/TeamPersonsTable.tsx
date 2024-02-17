@@ -13,8 +13,8 @@ import { Table, TableHead, TableRow, TableBody, TableFooter } from "@mui/materia
 import { useEffect, useState } from "react"
 
 
-function TeamPersonsTable({ team }: { team: TeamType }) {
-  const personCount = Object.keys(team.persons).length
+function TeamPersonsTable({ team, filter = '' }: { team: TeamType, filter?: string }) {
+  const [personCount, setPersonCount] = useState(Object.keys(team.persons).length)
 
   // Table Manipulation
   const [page, setPage] = useState(0)
@@ -43,29 +43,35 @@ function TeamPersonsTable({ team }: { team: TeamType }) {
 
   // Data Manipulation
   const [rows, setRows] = useState<PersonType[]>([]);
-  const [key, setKey] = useState('')
+
+  function filterItems(array: PersonType[], query: string) {
+    return array.filter((el: PersonType) => el.name.toLowerCase().includes(query.toLowerCase()));
+  }
 
   function refreshRows(page: number, rowsPerPage: number) {
     let newRows: PersonType[] = []
+    const arrayPersons = team.persons ? filterItems(team.persons, filter) : [];
+    setPersonCount(arrayPersons.length)
+
     for (let i = 0; i < rowsPerPage; i++) {
       const calc = i + (page) * rowsPerPage
-      if (calc < personCount)
-        newRows.push(team.persons[calc])
+      if (calc < arrayPersons.length)
+        newRows.push(arrayPersons[calc])
       else if (personCount > 5) {
-        newRows.push({
-          id: calc,
-          name: '',
-          email: '',
-          phone: '',
-        } as PersonType)
+        newRows.push({ id: calc, name: '', email: '', phone: '' } as PersonType)
       } else break
     }
+    
     setRows(newRows)
   }
 
   useEffect(() => {
     refreshRows(page, rowsPerPage)
   }, [])
+
+  useEffect(() => {
+    refreshRows(page, rowsPerPage)
+  }, [team, filter, rows.length])
 
   // Popup
   const [targetPerson, setTargetPerson] = useState<PersonType>({
@@ -123,8 +129,8 @@ function TeamPersonsTable({ team }: { team: TeamType }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((person) => (
-              <StyledTableRow key={person.id + person.name + person.email + person.phone as string}>
+            {rows.length > 0 && rows.map((person) => (
+              <StyledTableRow key={person.id}>
                 <StyledBodyTableCell>{person.name}</StyledBodyTableCell>
                 <StyledBodyTableCell>{person.email}</StyledBodyTableCell>
                 <StyledBodyTableCell>{person.phone}</StyledBodyTableCell>
@@ -132,11 +138,11 @@ function TeamPersonsTable({ team }: { team: TeamType }) {
                 {person.name !== '' ?
 
                   <StyledBodyTableCell>
-                    <div style={{ display: 'flex', justifyContent: 'left', gap: '0 8px' }}>
-                      {/* <EditButtonOutline size='small' style={{ height: 32 }} onClick={() => {
+                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0 8px' }}>
+                      <EditButtonOutline size='small' style={{ height: 32 }} onClick={() => {
                         setTargetPerson(person)
                         handleShowEditPerson()
-                      }}>EDIT</EditButtonOutline> */}
+                      }}>EDIT</EditButtonOutline>
                       <DeleteButton size='small' style={{ height: 32 }} onClick={() => {
                         setTargetPerson(person)
                         handleShowRemovePersonFromTeam()
@@ -147,6 +153,16 @@ function TeamPersonsTable({ team }: { team: TeamType }) {
                   : <StyledBodyTableCell></StyledBodyTableCell>}
               </StyledTableRow>
             ))}
+
+            {rows.length < 1 && <tr>
+              <td colSpan={4}>
+                <h1 style={{
+                  margin: '16px 0',
+                  textAlign: 'center',
+                  fontSize: 23,
+                }}>No persons found</h1>
+              </td>
+            </tr>}
 
           </TableBody>
           <TableFooter style={{ height: 24 }} sx={{ height: 24 }}>

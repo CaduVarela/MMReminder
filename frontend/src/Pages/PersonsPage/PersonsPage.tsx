@@ -51,7 +51,7 @@ function PersonsPage() {
   }
 
   // Data Fetch
-  const { data: persons, isLoading, refetch, isSuccess } = useQuery({
+  const { data: persons, isLoading, refetch, isSuccess, isError } = useQuery({
     queryKey: ["persons", page],
     queryFn: async () => {
       return await fetch(`http://localhost:3000/api/person?page=${page - 1}&take=${rowsPerPage}&name=${filterText}`)
@@ -62,7 +62,7 @@ function PersonsPage() {
   useEffect(() => {
     if (isLoading === false)
       setPageCount(Math.ceil(persons.pagination.count / rowsPerPage))
-  }, [isSuccess])
+  }, [persons, isSuccess])
 
   return (
     <>
@@ -82,23 +82,24 @@ function PersonsPage() {
           <div>
             <RoundedTextBar
               placeholder='Filter by Person Name'
-              style={{ marginRight: '16px' }}
+              style={{ marginRight: '16px', width: 280 }}
               onChange={(e) => setFilterText(e.target.value)}>
             </RoundedTextBar>
             <FilterButton onClick={() => refetch()}>FILTER</FilterButton>
           </div>
-          <RefreshButtonOutline onClick={() => refetch()} >REFRESH</RefreshButtonOutline>
-          <AddButtonOutline onClick={handleShowAddPerson}>ADD PERSON</AddButtonOutline>
+          <RefreshButtonOutline onClick={() => refetch()} style={{ width: 184 }}>REFRESH</RefreshButtonOutline>
+          <AddButtonOutline onClick={handleShowAddPerson} style={{ width: 184 }}>ADD PERSON</AddButtonOutline>
         </PanelHeader>
 
         <PanelBody>
-          {persons ? persons.data.map((person: PersonType) => (
+          {persons ? persons?.data.map((person: PersonType) => (
             <PersonCard
               key={person.id}
               person={person}
             />
           )) : isLoading && <div className='full-center'> <StyledCircularProgress /> </div>}
           {persons?.pagination.count <= 0 && <h1 className='no-persons-registered'> No persons found...</h1>}
+          {isError && <h1 className='person-error-ocurred'>Sorry, an error has occurred :(</h1>}
         </PanelBody>
 
         <PanelFooter>

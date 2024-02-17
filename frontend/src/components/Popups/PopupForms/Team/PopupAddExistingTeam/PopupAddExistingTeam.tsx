@@ -41,6 +41,8 @@ function PopupAddExistingTeam({ person, handleClose }: { person: PersonType, han
     return { id, name };
   }
 
+  const queryClient = useQueryClient()
+
   const teamMutation = useMutation({
     mutationKey: ["add-team-to-person"],
     mutationFn: async () => {
@@ -55,17 +57,18 @@ function PopupAddExistingTeam({ person, handleClose }: { person: PersonType, han
           'Content-Type': 'application/json',
         },
       })
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries({
+        queryKey: ["persons"]
+      })
     }
   })
-
-  const queryClient = useQueryClient()
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     teamMutation.mutate()
-
-    queryClient.resetQueries()
 
     handleClose()
   }

@@ -11,6 +11,8 @@ function PersonCard({ person }: { person: PersonType }) {
 
   const personCount = person.teams ? Object.keys(person.teams).length : 0
 
+  const [filterText, setFilterText] = useState('')
+
   // Page Behavior Manipulation
   const [isOpened, setIsOpened] = useState(false)
 
@@ -28,10 +30,10 @@ function PersonCard({ person }: { person: PersonType }) {
       </div>
       {isOpened &&
         <div className='person-card-opened-content'>
-          <PersonControlBar person={person} />
+          <PersonControlBar person={person} setFilterText={setFilterText} />
 
           {personCount > 0 ?
-            <PersonTeamsTable person={person} />
+            <PersonTeamsTable person={person} filter={filterText}/>
             : <p className='no-teams-yet'> this person is not on any team yet... </p>
           }
 

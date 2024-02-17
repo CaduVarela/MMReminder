@@ -20,18 +20,20 @@ function PopupEditTeam({ team, handleClose }: { team: TeamType, handleClose: Fun
 
   const [nameError, setNameError] = useState(false)
 
-  const zodSchema = z.string().trim().min(1)
+  const zodSchema = z.string().trim().min(1).max(40)
 
   function validateFields(): boolean {
     try {
       zodSchema.parse(name)
       return true
     } catch (err) {
-      console.log(err)
+      setNameError(true)
       return false
     }
 
   }
+
+  const queryClient = useQueryClient()
 
   const teamMutation = useMutation({
     mutationKey: ["update-team"],
@@ -39,28 +41,27 @@ function PopupEditTeam({ team, handleClose }: { team: TeamType, handleClose: Fun
       return await fetch(`http://localhost:3000/api/team/${team.id}`, {
         method: 'PUT',
         body: JSON.stringify({
-          name: name,
+          name: name.trim(),
         }),
         headers: {
           'Content-Type': 'application/json',
         },
       })
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries({
+        queryKey: ["teams"]
+      })
     }
   })
-
-  const queryClient = useQueryClient()
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    if (!validateFields()) {
-      setNameError(true)
-      return
-    }
-    
+    if (!validateFields()) return
+
     teamMutation.mutate()
-    
-    queryClient.resetQueries()
+
     handleClose()
   }
 

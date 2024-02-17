@@ -16,18 +16,19 @@ function PopupAddNewTeam({ handleClose }: { handleClose: Function }) {
 
   const [nameError, setNameError] = useState(false)
 
-  const zodSchema = z.string().trim().min(1)
+  const zodSchema = z.string().trim().min(1).max(40)
 
   function validateFields(): boolean {
     try {
       zodSchema.parse(name)
       return true
     } catch (err) {
-      console.log(err)
+      setNameError(true)
       return false
     }
-
   }
+  
+  const queryClient = useQueryClient()
 
   const teamMutation = useMutation({
     mutationKey: ["new-team"],
@@ -35,26 +36,25 @@ function PopupAddNewTeam({ handleClose }: { handleClose: Function }) {
       return await fetch('http://localhost:3000/api/team', {
         method: 'POST',
         body: JSON.stringify({
-          name: name,
+          name: name.trim(),
         }),
         headers: {
           'Content-Type': 'application/json',
         },
       })
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries({
+        queryKey: ["teams"]
+      })
     }
   })
 
-  const queryClient = useQueryClient()
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    if (!validateFields()) {
-      setNameError(true)
-      return
-    }
-
-    queryClient.resetQueries()
+    if (!validateFields()) return
 
     teamMutation.mutate()
 
@@ -69,7 +69,7 @@ function PopupAddNewTeam({ handleClose }: { handleClose: Function }) {
         </h1>
         <form className='form' onSubmit={handleSubmit}>
           <div className='team-name-group'>
-            <InputLabel htmlFor='team-name-field'>Team Name</InputLabel>
+            <InputLabel htmlFor='team-name-field'>Name</InputLabel>
             <StyledInputField
               id='team-name-field'
               placeholder='team name'
