@@ -9,6 +9,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 function PopupDeleteTeam({ team, handleClose }: { team: TeamType, handleClose: Function }) {
 
+  const queryClient = useQueryClient()
+
   const teamMutation = useMutation({
     mutationKey: ["delete-team"],
     mutationFn: async () => {
@@ -18,17 +20,18 @@ function PopupDeleteTeam({ team, handleClose }: { team: TeamType, handleClose: F
           'Content-Type': 'application/json',
         },
       })
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries({
+        queryKey: ["teams"]
+      })
     }
   })
-
-  const queryClient = useQueryClient()
 
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault()
 
     teamMutation.mutate()
-
-    queryClient.resetQueries()
 
     handleClose()
   }

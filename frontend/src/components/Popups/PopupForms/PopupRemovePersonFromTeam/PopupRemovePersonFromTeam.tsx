@@ -19,6 +19,8 @@ function PopupRemovePersonFromTeam(
     handleClose: Function
   }) {
 
+  const queryClient = useQueryClient();
+  
   const personMutation = useMutation({
     mutationKey: ["remove-person-from-team"],
     mutationFn: async () => {
@@ -33,10 +35,16 @@ function PopupRemovePersonFromTeam(
           'Content-Type': 'application/json',
         },
       })
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries({
+        queryKey: ["teams"]
+      })
+      queryClient.refetchQueries({
+        queryKey: ["persons"]
+      })
     }
   })
-
-  const queryClient = useQueryClient();
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()

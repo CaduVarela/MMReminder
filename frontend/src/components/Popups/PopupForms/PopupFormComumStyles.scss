@@ -1,10 +1,11 @@
 .content-wrapper {
 
-  h1 {
+  > h1 {
     color: $cardDarkColor;
     border-bottom: 1px solid rgba($darkColor, .3);
     padding-bottom: 8px;
     margin-bottom: 32px;
+    text-align: center;
   }
 
   form {

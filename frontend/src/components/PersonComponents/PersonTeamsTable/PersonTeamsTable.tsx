@@ -13,8 +13,8 @@ import { Table, TableHead, TableRow, TableBody, TableFooter } from "@mui/materia
 import { useEffect, useState } from "react"
 
 
-function PersonTeamsTable({ person }: { person: PersonType }) {
-  const personCount = Object.keys(person.teams).length
+function PersonTeamsTable({ person, filter }: { person: PersonType, filter: string }) {
+  const [personCount, setPersonCount] = useState(Object.keys(person.teams).length)
 
   // Table Manipulation
   const [page, setPage] = useState(0)
@@ -44,19 +44,24 @@ function PersonTeamsTable({ person }: { person: PersonType }) {
   // Data Manipulation
   const [rows, setRows] = useState<TeamType[]>([]);
 
+  function filterItems(array: TeamType[], query: string) {
+    return array.filter((el: TeamType) => el.name.toLowerCase().includes(query.toLowerCase()));
+  }
+
   function refreshRows(page: number, rowsPerPage: number) {
     let newRows: TeamType[] = []
+    const arrayTeams = person.teams ? filterItems(person.teams, filter) : [];
+    setPersonCount(arrayTeams.length)
+
     for (let i = 0; i < rowsPerPage; i++) {
       const calc = i + (page) * rowsPerPage
-      if (calc < personCount)
-        newRows.push(person.teams[calc])
+      if (calc < arrayTeams.length)
+        newRows.push(arrayTeams[calc])
       else if (personCount > 5) {
-        newRows.push({
-          id: calc,
-          name: ''
-        } as TeamType)
+        newRows.push({ id: calc, name: '' } as TeamType)
       } else break
     }
+
     setRows(newRows)
   }
 
@@ -64,11 +69,12 @@ function PersonTeamsTable({ person }: { person: PersonType }) {
     refreshRows(page, rowsPerPage)
   }, [])
 
+  useEffect(() => {
+    refreshRows(page, rowsPerPage)
+  }, [person, filter, rows.length])
+
   // Popup
-  const [targetTeam, setTargetTeam] = useState<TeamType>({
-    id: -1,
-    name: ''
-  } as TeamType)
+  const [targetTeam, setTargetTeam] = useState<TeamType>({ id: -1, name: '' } as TeamType)
 
   const [showRemovePersonFromTeam, setShowRemovePersonFromTeam] = useState(false)
   const handleShowRemovePersonFromTeam = () => {
@@ -99,7 +105,7 @@ function PersonTeamsTable({ person }: { person: PersonType }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((team) => (
+            {rows.length > 0 && rows.map((team) => (
               <StyledTableRow key={team.id}>
                 <StyledBodyTableCell>{team.name}</StyledBodyTableCell>
 
@@ -117,6 +123,16 @@ function PersonTeamsTable({ person }: { person: PersonType }) {
                   : <StyledBodyTableCell></StyledBodyTableCell>}
               </StyledTableRow>
             ))}
+
+            {rows.length < 1 && <tr>
+              <td colSpan={4}>
+                <h1 style={{
+                  margin: '16px 0',
+                  textAlign: 'center',
+                  fontSize: 23,
+                }}>No teams found</h1>
+              </td>
+            </tr>}
 
           </TableBody>
           <TableFooter style={{ height: 24 }} sx={{ height: 24 }}>

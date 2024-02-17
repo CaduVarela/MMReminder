@@ -93,6 +93,9 @@ function PopupEditPerson({ person, handleClose }: { person: PersonType, handleCl
   }, [])
 
   let newPerson: PersonType = { name, email, phone } as PersonType
+
+  const queryClient = useQueryClient()
+
   const personMutation = useMutation({
     mutationKey: ["update-person"],
     mutationFn: async () => {
@@ -105,14 +108,19 @@ function PopupEditPerson({ person, handleClose }: { person: PersonType, handleCl
           'Content-Type': 'application/json',
         },
       })
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries({
+        queryKey: ["persons"]
+      })
+      queryClient.refetchQueries({
+        queryKey: ["teams"],
+      })
     }
   })
 
-  const queryClient = useQueryClient()
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-
 
     if (!validateFields()) { return }
 
@@ -123,7 +131,6 @@ function PopupEditPerson({ person, handleClose }: { person: PersonType, handleCl
 
     personMutation.mutate()
 
-    queryClient.refetchQueries()
     handleClose()
   }
 

@@ -11,7 +11,7 @@ import FilterButtonOutline from '../../CustomMUI/Buttons/FilterButtons/FilterBut
 
 import RoundedTextBar from '../../CustomMUI/RoundedTextBar'
 import PopupModal from '../../Popups/PopupModal'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import PopupAddExistingPerson from '../../Popups/PopupForms/Person/PopupAddExistingPerson/PopupAddExistingPerson'
 import PopupDeleteTeam from '../../Popups/PopupForms/Team/PopupDeleteTeam/PopupDeleteTeam'
 import PopupEditTeam from '../../Popups/PopupForms/Team/PopupEditTeam/PopupEditTeam'
@@ -19,13 +19,13 @@ import { TeamType } from '@assets/types/BackendTypes'
 
 function TeamControlBar({
   team,
-  handleFilterChange
+  setFilterText
 }: {
   team: TeamType,
-  handleFilterChange: Function
+  setFilterText: Dispatch<SetStateAction<string>>
 }) {
 
-  const [filterText, setFilterText] = useState('')
+  const [thisFilter, setThisFilter] = useState('')
 
   const buttonHeight = '40px';
 
@@ -75,18 +75,19 @@ function TeamControlBar({
       </PopupModal>
 
       <div className='team-control-bar'>
-        {/* <div>
+        <div>
           <RoundedTextBar
             placeholder='Filter by Person Name'
             style={{ marginRight: '8px', height: buttonHeight }}
             onChange={(e) => setFilterText(e.target.value)}
-            value={filterText}
+            // onChange={(e) => setThisFilter(e.target.value)}
+            // value={thisFilter}
           ></RoundedTextBar>
-          <FilterButtonOutline
+          {/* <FilterButtonOutline
             style={{ height: buttonHeight }}
-            onClick={(e) => handleFilterChange(e, filterText)}
-          >FILTER</FilterButtonOutline>
-        </div> */}
+            onClick={() => {setFilterText(thisFilter)}}
+          >FILTER</FilterButtonOutline> */}
+        </div>
         <AddButtonOutline style={{ height: buttonHeight }} onClick={handleAddExistingPerson}>ADD PERSON</AddButtonOutline>
         <EditButtonOutline style={{ height: buttonHeight }} onClick={handleShowEditTeam}>EDIT TEAM</EditButtonOutline>
         <DeleteButton style={{ height: buttonHeight }} onClick={handleShowDeleteTeam}>DELETE TEAM</DeleteButton>

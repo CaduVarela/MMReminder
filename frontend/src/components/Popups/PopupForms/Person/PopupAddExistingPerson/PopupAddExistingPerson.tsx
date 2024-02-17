@@ -34,7 +34,7 @@ function PopupAddExistingPerson({ team, handleClose }: { team: TeamType, handleC
     setFilterText(event.target.value)
   }
 
-  
+  const queryClient = useQueryClient()
 
   const teamMutation = useMutation({
     mutationKey: ["add-person-to-team"],
@@ -50,6 +50,11 @@ function PopupAddExistingPerson({ team, handleClose }: { team: TeamType, handleC
           'Content-Type': 'application/json',
         },
       })
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries({
+        queryKey: ["teams"]
+      })
     }
   })
 
@@ -58,7 +63,6 @@ function PopupAddExistingPerson({ team, handleClose }: { team: TeamType, handleC
 
     teamMutation.mutate()
 
-    // queryClient.resetQueries()
     handleClose()
   }
 

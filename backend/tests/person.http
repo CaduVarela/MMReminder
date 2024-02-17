@@ -6,7 +6,7 @@ content-type: application/json
   "email": "sample@person.com",
   "phone": "42999362757",
   "$connect": {
-    "teams": [ 1, 5, 7 ]
+    "teams": [ 13 ]
   }
 }
 

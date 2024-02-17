@@ -52,7 +52,7 @@ function TeamsPage() {
   }
 
   // Data Fetch
-  const { data: teams, isLoading, refetch, isSuccess } = useQuery({
+  const { data: teams, isLoading, refetch, isSuccess, isError } = useQuery({
     queryKey: ["teams", page],
     queryFn: async () => {
       return await fetch(`http://localhost:3000/api/team?page=${page - 1}&take=${rowsPerPage}&name=${filterText}`)
@@ -63,7 +63,7 @@ function TeamsPage() {
   useEffect(() => {
     if (isLoading === false)
       setPageCount(Math.ceil(teams.pagination.count / rowsPerPage))
-  }, [isSuccess])
+  }, [teams, isSuccess])
 
   return (
     <>
@@ -83,16 +83,16 @@ function TeamsPage() {
           <div>
             <RoundedTextBar
               placeholder='Filter by Team Name'
-              style={{ marginRight: '16px' }}
+              style={{ marginRight: '16px', width: 280 }}
               onChange={(e) => setFilterText(e.target.value)}>
             </RoundedTextBar>
             <FilterButton onClick={() => refetch()}>FILTER</FilterButton>
           </div>
-          <RefreshButtonOutline onClick={() => refetch()} >REFRESH</RefreshButtonOutline>
-          <AddButtonOutline onClick={handleShowAddTeam}>ADD TEAM</AddButtonOutline>
+          <RefreshButtonOutline onClick={() => refetch()} style={{ width: 184 }}>REFRESH</RefreshButtonOutline>
+          <AddButtonOutline onClick={handleShowAddTeam} style={{ width: 184 }}>ADD TEAM</AddButtonOutline>
         </PanelHeader>
 
-        <PanelBody key={teams}>
+        <PanelBody>
           {teams?.data.map((team: TeamType) => (
             <TeamCard
               key={team.id + team.name}
@@ -101,6 +101,7 @@ function TeamsPage() {
           ))}
           {isLoading && <div className='full-center'> <StyledCircularProgress /> </div>}
           {teams?.pagination.count <= 0 && <h1 className='no-teams-registered'> No teams found...</h1>}
+          {isError && <h1 className='team-error-ocurred'>Sorry, an error has occurred :(</h1>}
         </PanelBody>
 
         <PanelFooter>
