@@ -63,6 +63,12 @@ Esse projeto é um sistema simples para gerenciar times e pessoas.
 
 O projeto possui duas telas principais as quais podem ser acessadas a partir do menu no topo da tela, uma de para <b>Times</b> (Teams) e outra para <b>Pessoas</b> (Persons):
 
+### Detalhes
+
+- Todas as pesquisas são paginadas e as paginas podem ser acessadas por botões na parte inferior do respectivo elemento.
+
+- Todas as telas são responsivas para navegadores desktop.
+
 ### Times
 
 ![TeamsPage](./demo/TeamsPage.png)
@@ -77,8 +83,6 @@ Para acessar as funcionalidades de cada time, basta clicar no cartão do time pa
 
 De maneira muito similiar, esta pagina possui todas as funcionalidades da pagina de time, porém desta vez serão listadas todas as pessoas e você podera gerenciar os times de cada pessoa.
 
-### Detalhes
+## Obrigado!
 
-- Todas as pesquisas são paginadas e as paginas podem ser acessadas por botões na parte inferior do respectivo elemento.
-
-- Todas as telas são responsivas para navegadores desktop.
+Obrigado por vizitar meu projeto! :)
