@@ -14,15 +14,15 @@ import { useEffect, useState } from "react"
 
 
 function PersonTeamsTable({ person, filter }: { person: PersonType, filter: string }) {
-  const [personCount, setPersonCount] = useState(Object.keys(person.teams).length)
+  const [teamCount, setTeamCount] = useState(Object.keys(person.teams).length)
 
   // Table Manipulation
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
 
   const [rowsPerPageOptions, setRowsPerPageOptions] = useState(
-    personCount > 10 ? [5, 10, 20]
-      : personCount > 5 ? [5, 10] : [],
+    teamCount > 10 ? [5, 10, 20]
+      : teamCount > 5 ? [5, 10] : [],
   )
 
   const handleChangePage = (
@@ -38,7 +38,7 @@ function PersonTeamsTable({ person, filter }: { person: PersonType, filter: stri
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
-    refreshRows(page, parseInt(event.target.value, 10))
+    refreshRows(0, parseInt(event.target.value, 10))
   }
 
   // Data Manipulation
@@ -50,19 +50,30 @@ function PersonTeamsTable({ person, filter }: { person: PersonType, filter: stri
 
   function refreshRows(page: number, rowsPerPage: number) {
     let newRows: TeamType[] = []
-    const arrayTeams = person.teams ? filterItems(person.teams, filter) : [];
-    setPersonCount(arrayTeams.length)
+
+    const start = page > 0 ? page + (page * rowsPerPage) - 1 : 0
+    const end = (page + 1) * rowsPerPage
+    const slicedArray = person.teams ? person.teams.slice(start, end) : []
+
+    const arrayTeams = filterItems(slicedArray, filter)
 
     for (let i = 0; i < rowsPerPage; i++) {
-      const calc = i + (page) * rowsPerPage
-      if (calc < arrayTeams.length)
-        newRows.push(arrayTeams[calc])
-      else if (personCount > 5) {
-        newRows.push({ id: calc, name: '' } as TeamType)
-      } else break
+      if (i < arrayTeams.length)
+        newRows.push(arrayTeams[i])
+
+      else if (teamCount > rowsPerPage)
+        newRows.push({ id: Math.round(Math.random() * -10), name: '' } as TeamType)
     }
 
     setRows(newRows)
+
+    const count = filterItems(person.teams, filter).length
+    setTeamCount(count)
+
+    let newPage = page
+    while (newPage * rowsPerPage > Math.round(count / rowsPerPage) * rowsPerPage)
+      newPage--
+    setPage(newPage)
   }
 
   useEffect(() => {
@@ -71,7 +82,7 @@ function PersonTeamsTable({ person, filter }: { person: PersonType, filter: stri
 
   useEffect(() => {
     refreshRows(page, rowsPerPage)
-  }, [person, filter, rows.length])
+  }, [person, filter, rows.length, page, rowsPerPage])
 
   // Popup
   const [targetTeam, setTargetTeam] = useState<TeamType>({ id: -1, name: '' } as TeamType)
@@ -139,7 +150,7 @@ function PersonTeamsTable({ person, filter }: { person: PersonType, filter: stri
             <TableRow>
               <StyledTablePagination
                 rowsPerPageOptions={rowsPerPageOptions}
-                count={personCount}
+                count={teamCount}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

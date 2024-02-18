@@ -1,3 +1,4 @@
+import PersonsPage from "@/Pages/PersonsPage/PersonsPage"
 import { PersonType, TeamType } from "@/assets/types/BackendTypes"
 import DeleteButton from "@/components/CustomMUI/Buttons/DeleteButtons/DeleteButton"
 import EditButtonOutline from "@/components/CustomMUI/Buttons/EditButtons/EditButtonOutline"
@@ -38,7 +39,7 @@ function TeamPersonsTable({ team, filter = '' }: { team: TeamType, filter?: stri
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
-    refreshRows(page, parseInt(event.target.value, 10))
+    refreshRows(0, parseInt(event.target.value, 10))
   }
 
   // Data Manipulation
@@ -50,19 +51,36 @@ function TeamPersonsTable({ team, filter = '' }: { team: TeamType, filter?: stri
 
   function refreshRows(page: number, rowsPerPage: number) {
     let newRows: PersonType[] = []
-    const arrayPersons = team.persons ? filterItems(team.persons, filter) : [];
-    setPersonCount(arrayPersons.length)
+
+    const start = page > 0 ? page + (page * rowsPerPage) - 1 : 0
+    const end = (page + 1) * rowsPerPage
+    const slicedArray = team.persons ? team.persons.slice(start, end) : []
+
+    const arrayPersons = filterItems(slicedArray, filter)
 
     for (let i = 0; i < rowsPerPage; i++) {
-      const calc = i + (page) * rowsPerPage
-      if (calc < arrayPersons.length)
-        newRows.push(arrayPersons[calc])
-      else if (personCount > 5) {
-        newRows.push({ id: calc, name: '', email: '', phone: '' } as PersonType)
-      } else break
+      if (i < arrayPersons.length)
+        newRows.push(arrayPersons[i])
+
+      else if (personCount > rowsPerPage)
+        newRows.push({ id: i, name: '', email: '', phone: '' } as PersonType)
     }
-    
+
     setRows(newRows)
+
+    const count = filterItems(team.persons, filter).length
+    setPersonCount(count)
+
+    let newPage = page
+
+    if (count === 0)
+      newPage = 0
+
+    else
+      while (newPage * rowsPerPage > Math.round(count / rowsPerPage) * rowsPerPage)
+        newPage--
+
+    setPage(newPage)
   }
 
   useEffect(() => {
@@ -71,7 +89,7 @@ function TeamPersonsTable({ team, filter = '' }: { team: TeamType, filter?: stri
 
   useEffect(() => {
     refreshRows(page, rowsPerPage)
-  }, [team, filter, rows.length])
+  }, [team, filter, rows.length, page, rowsPerPage])
 
   // Popup
   const [targetPerson, setTargetPerson] = useState<PersonType>({
