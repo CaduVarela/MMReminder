@@ -6,11 +6,11 @@ import CustomButton from "../CustomButton";
 
 const AddButtonOutline = styled(CustomButton)({
   backgroundColor: palette.lightColor,
-  border: `1px solid ${palette.warningColor}`,
-  color: palette.warningColor,
+  border: `1px solid ${palette.errorColor}`,
+  color: palette.errorColor,
   ":hover": {
     backgroundColor: palette.lightColor,
-    borderColor: palette.warningColor,
+    borderColor: palette.errorColor,
     filter: 'none'
   }
 })

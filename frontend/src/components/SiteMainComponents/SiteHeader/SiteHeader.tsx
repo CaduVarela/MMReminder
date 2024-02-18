@@ -1,7 +1,7 @@
 import './SiteHeader.scss'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { changeTab, stateType } from '../../../store/slice'
+import { changeTab, TabType } from '../../../store/tabSlice'
 import palette from '@assets/styles/palette.module.scss'
 
 import HeaderButton from '../../CustomMUI/Buttons/HeaderButton'
@@ -10,7 +10,7 @@ export default function SiteHeader() {
 
   const dispatch = useDispatch()
 
-  const tab = useSelector((state: stateType) => state.tab.tab)
+  const tab = useSelector((state: TabType) => state.tab.tab)
 
   const handleTabChange = (newTab: "teams" | "persons") => {
     dispatch(changeTab(newTab))

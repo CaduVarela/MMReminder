@@ -5,10 +5,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CustomButton from "../CustomButton";
 
 const DeleteButton = styled(CustomButton)({
-  backgroundColor: palette.warningColor,
+  backgroundColor: palette.errorColor,
   color: palette.lightColor,
   ":hover": {
-    backgroundColor: palette.warningColor,
+    backgroundColor: palette.errorColor,
   }
 })
 

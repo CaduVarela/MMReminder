@@ -15,6 +15,8 @@ import { ZodError, z } from 'zod'
 import validator from 'validator'
 import IMask, { InputMaskElement } from 'imask'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { setAlert } from '@/store/alertSlice'
+import { useDispatch } from 'react-redux'
 
 function PopupEditPerson({ person, handleClose }: { person: PersonType, handleClose: Function }) {
 
@@ -94,6 +96,7 @@ function PopupEditPerson({ person, handleClose }: { person: PersonType, handleCl
 
   let newPerson: PersonType = { name, email, phone } as PersonType
 
+  const dispatch = useDispatch()
   const queryClient = useQueryClient()
 
   const personMutation = useMutation({
@@ -116,6 +119,11 @@ function PopupEditPerson({ person, handleClose }: { person: PersonType, handleCl
       queryClient.refetchQueries({
         queryKey: ["teams"],
       })
+      dispatch(setAlert({
+        text: "Person updated successfully!",
+        severity: "success",
+        autoHideDuration: 3000
+      }))
     }
   })
 

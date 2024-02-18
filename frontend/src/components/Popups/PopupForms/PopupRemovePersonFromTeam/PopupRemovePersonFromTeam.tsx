@@ -7,6 +7,8 @@ import PopupBox from '../../PopupBox'
 import { FormEvent } from 'react'
 import { PersonType, TeamType } from '@/assets/types/BackendTypes'
 import { QueryClient, useMutation, useQueryClient } from '@tanstack/react-query'
+import { setAlert } from '@/store/alertSlice'
+import { useDispatch } from 'react-redux'
 
 function PopupRemovePersonFromTeam(
   {
@@ -19,6 +21,7 @@ function PopupRemovePersonFromTeam(
     handleClose: Function
   }) {
 
+  const dispatch = useDispatch()
   const queryClient = useQueryClient();
   
   const personMutation = useMutation({
@@ -43,6 +46,11 @@ function PopupRemovePersonFromTeam(
       queryClient.refetchQueries({
         queryKey: ["persons"]
       })
+      dispatch(setAlert({
+        text: "Removed person from team successfully!",
+        severity: "success",
+        autoHideDuration: 3000
+      }))
     }
   })
 

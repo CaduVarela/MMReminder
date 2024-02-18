@@ -10,6 +10,9 @@ import { Pagination } from '@mui/material'
 import { PersonType, TeamType } from '@/assets/types/BackendTypes'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import StyledCircularProgress from '@/components/CustomMUI/StyledCircularProgress'
+import PopupAlert from '@/components/PopupAlert/PopupAlert'
+import { setAlert } from '@/store/alertSlice'
+import { useDispatch } from 'react-redux'
 
 function PopupAddExistingTeam({ person, handleClose }: { person: PersonType, handleClose: Function }) {
 
@@ -42,6 +45,7 @@ function PopupAddExistingTeam({ person, handleClose }: { person: PersonType, han
     return { id, name };
   }
 
+  const dispatch = useDispatch()
   const queryClient = useQueryClient()
 
   const teamMutation = useMutation({
@@ -63,6 +67,14 @@ function PopupAddExistingTeam({ person, handleClose }: { person: PersonType, han
       queryClient.refetchQueries({
         queryKey: ["persons"]
       })
+      queryClient.refetchQueries({
+        queryKey: ["teams"]
+      })
+      dispatch(setAlert({
+        text: "Team added successfully!",
+        severity: "success",
+        autoHideDuration: 3000
+      }))
     }
   })
 

@@ -6,9 +6,12 @@ import DeleteButton from '../../../../CustomMUI/Buttons/DeleteButtons/DeleteButt
 import PopupBox from '../../../PopupBox'
 import { TeamType } from '@assets/types/BackendTypes'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { setAlert } from '@/store/alertSlice'
+import { useDispatch } from 'react-redux'
 
 function PopupDeleteTeam({ team, handleClose }: { team: TeamType, handleClose: Function }) {
 
+  const dispatch = useDispatch()
   const queryClient = useQueryClient()
 
   const teamMutation = useMutation({
@@ -25,6 +28,11 @@ function PopupDeleteTeam({ team, handleClose }: { team: TeamType, handleClose: F
       queryClient.refetchQueries({
         queryKey: ["teams"]
       })
+      dispatch(setAlert({
+        text: "Team deleted successfully!",
+        severity: "success",
+        autoHideDuration: 3000
+      }))
     }
   })
 

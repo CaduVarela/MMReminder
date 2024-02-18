@@ -6,9 +6,12 @@ import DeleteButton from '../../../../CustomMUI/Buttons/DeleteButtons/DeleteButt
 import PopupBox from '../../../PopupBox'
 import { PersonType } from '@/assets/types/BackendTypes'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { setAlert } from '@/store/alertSlice'
+import { useDispatch } from 'react-redux'
 
 function PopupDeletePerson({ person, handleClose }: { person: PersonType, handleClose: Function }) {
 
+  const dispatch = useDispatch()
   const queryClient = useQueryClient()
 
   const personMutation = useMutation({
@@ -25,6 +28,11 @@ function PopupDeletePerson({ person, handleClose }: { person: PersonType, handle
       queryClient.refetchQueries({
         queryKey: ["persons"]
       })
+      dispatch(setAlert({
+        text: "Person deleted successfully!",
+        severity: "success",
+        autoHideDuration: 3000
+      }))
     }
   })
 

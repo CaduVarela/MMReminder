@@ -12,6 +12,8 @@ import IMask, { InputMaskElement } from 'imask'
 import { ZodError, z } from 'zod'
 import validator from 'validator'
 import { PersonType } from '@/assets/types/BackendTypes'
+import { useDispatch } from 'react-redux'
+import { setAlert } from '@/store/alertSlice'
 
 function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
 
@@ -78,6 +80,7 @@ function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
 
   let newPerson: PersonType
 
+  const dispatch = useDispatch()
   const queryClient = useQueryClient()
 
   const personMutation = useMutation({
@@ -97,6 +100,11 @@ function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
       queryClient.refetchQueries({
         queryKey: ["persons"]
       })
+      dispatch(setAlert({
+        text: "New person created successfully!",
+        severity: "success",
+        autoHideDuration: 3000
+      }))
     }
   })
 

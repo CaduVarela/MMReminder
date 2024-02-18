@@ -13,6 +13,8 @@ import SaveIcon from '@mui/icons-material/Save';
 import { TeamType } from '@assets/types/BackendTypes'
 import { z } from 'zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useDispatch } from 'react-redux'
+import { setAlert } from '@/store/alertSlice'
 
 function PopupEditTeam({ team, handleClose }: { team: TeamType, handleClose: Function }) {
 
@@ -33,6 +35,7 @@ function PopupEditTeam({ team, handleClose }: { team: TeamType, handleClose: Fun
 
   }
 
+  const dispatch = useDispatch()
   const queryClient = useQueryClient()
 
   const teamMutation = useMutation({
@@ -52,6 +55,11 @@ function PopupEditTeam({ team, handleClose }: { team: TeamType, handleClose: Fun
       queryClient.refetchQueries({
         queryKey: ["teams"]
       })
+      dispatch(setAlert({
+        text: "Team updated successfully!",
+        severity: "success",
+        autoHideDuration: 3000
+      }))
     }
   })
 

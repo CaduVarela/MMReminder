@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export interface stateType {
+export interface TabType {
   tab: {
     tab?: string
   }
@@ -8,7 +8,7 @@ export interface stateType {
 
 const initialState = {
   tab: "teams"
-} as stateType
+} as TabType
 
 export const slice = createSlice({
   name: "tab",
