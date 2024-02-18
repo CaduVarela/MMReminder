@@ -9,9 +9,8 @@ import StyledInputField from '../../../../CustomMUI/StyledInputField'
 import PopupBox from '../../../PopupBox'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { z } from 'zod'
-import PopupAlert from '@/components/PopupAlert/PopupAlert'
-import { setAlert } from '@/store/alertSlice'
 import { useDispatch } from 'react-redux'
+import { setAlert } from '@/store/alertSlice'
 
 function PopupAddNewTeam({ handleClose }: { handleClose: Function }) {
 
@@ -52,7 +51,7 @@ function PopupAddNewTeam({ handleClose }: { handleClose: Function }) {
         queryKey: ["teams"]
       })
       dispatch(setAlert({
-        text: "New team created!",
+        text: "New team created successfully!",
         severity: "success",
         autoHideDuration: 3000
       }))
