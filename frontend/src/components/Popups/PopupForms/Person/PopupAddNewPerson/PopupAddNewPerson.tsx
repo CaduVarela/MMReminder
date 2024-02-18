@@ -48,9 +48,7 @@ function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
       return true
     } catch (err: any) {
       if (err instanceof ZodError) {
-        // console.log(err.errors)
         const flatten = err.flatten()
-        console.log(err.flatten())
 
         setNameError(false)
         setEmailError(false)
@@ -60,15 +58,12 @@ function PopupAddNewPerson({ handleClose }: { handleClose: Function }) {
           switch (key[0]) {
             case 'name':
               setNameError(true)
-              console.log('1')
               break;
             case 'email':
               setEmailError(true)
-              console.log('2')
               break;
             case 'phone':
               setPhoneError(true)
-              console.log('3')
               break;
           }
         })

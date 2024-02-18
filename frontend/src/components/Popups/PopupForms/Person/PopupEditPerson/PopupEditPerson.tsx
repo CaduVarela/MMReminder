@@ -24,8 +24,6 @@ function PopupEditPerson({ person, handleClose }: { person: PersonType, handleCl
 
   const [name, setName] = useState(person.name)
   const [email, setEmail] = useState(person.email)
-
-
   const [phone, setPhone] = useState(person.phone)
 
   const [nameError, setNameError] = useState(false)
@@ -55,9 +53,7 @@ function PopupEditPerson({ person, handleClose }: { person: PersonType, handleCl
       return true
     } catch (err: any) {
       if (err instanceof ZodError) {
-        // console.log(err.errors)
         const flatten = err.flatten()
-        console.log(err.flatten())
 
         setNameError(false)
         setEmailError(false)
@@ -67,15 +63,12 @@ function PopupEditPerson({ person, handleClose }: { person: PersonType, handleCl
           switch (key[0]) {
             case 'name':
               setNameError(true)
-              console.log('1')
               break;
             case 'email':
               setEmailError(true)
-              console.log('2')
               break;
             case 'phone':
               setPhoneError(true)
-              console.log('3')
               break;
           }
         })
@@ -119,6 +112,7 @@ function PopupEditPerson({ person, handleClose }: { person: PersonType, handleCl
       queryClient.refetchQueries({
         queryKey: ["teams"],
       })
+
       dispatch(setAlert({
         text: "Person updated successfully!",
         severity: "success",
