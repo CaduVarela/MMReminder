@@ -54,7 +54,7 @@ Frontend:
 Backend:
 1. Abra outro terminal dentro da pasta "backend" e execute o comando <code>npm install</code>.
 2. execute o comando <code>npm run build</code> no mesmo diretório para construir a aplicação.
-3. execute o comando <code>npm run preview</code> no mesmo diretório para rodar a aplicação.
+3. execute o comando <code>npm run start</code> no mesmo diretório para rodar a aplicação.
 4. A aplicação estará rodando na URL: <b><a>http://localhost:3000</a></b>
 
 ## Sobre o Projeto
