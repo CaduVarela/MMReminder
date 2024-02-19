@@ -71,6 +71,8 @@ O projeto possui duas telas principais as quais podem ser acessadas a partir do 
 
 - As unica chave primaria é o ID, tanto para times quanto para pessoas. Portanto, por exemplo, podem existir multiplos times com o mesmo nome.
 
+- A aplicação só aceita números de telefone (phone) do Brasil (pt-br).
+
 ### Times
 
 ![TeamsPage](./demo/TeamsPage.png)
