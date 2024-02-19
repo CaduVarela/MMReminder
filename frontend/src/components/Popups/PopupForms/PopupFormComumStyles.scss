@@ -8,13 +8,25 @@
     text-align: center;
   }
 
+  .edit-color {
+    color: $warningColor;
+  }
+
+  .warning-color {
+    color: $warningColor;
+  }
+
+  .danger-color {
+    color: $errorColor;
+  }
+
   form {
 
     display: flex;
 
     flex-direction: column;
 
-    gap: 32px 0;
+    gap: 21px 0;
 
     &>* {
       width: 100%;
@@ -28,6 +40,14 @@
       position: static;
       bottom: 32px;
 
+    }
+
+    .field-error {
+      display: block;
+      width: 100%;
+      padding: 0;
+      margin: 8px 0 0 0;
+      color: $warningColor
     }
   }
 

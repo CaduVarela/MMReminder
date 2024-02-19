@@ -12,7 +12,7 @@ export function zodValidate(zodSchema: ZodSchema<any>): RequestHandler {
       next()
     } catch (err: any) {
       if (err instanceof z.ZodError) {
-        res.status(400).json(err.issues)
+        res.status(400).json(err)
         return
       }
       res.status(400).json(err.issues)

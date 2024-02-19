@@ -8,7 +8,7 @@ import AddButton from '../../../../CustomMUI/Buttons/AddButtons/AddButton'
 import StyledInputField from '../../../../CustomMUI/StyledInputField'
 import PopupBox from '../../../PopupBox'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { z } from 'zod'
+import { ZodError, z } from 'zod'
 import { useDispatch } from 'react-redux'
 import { setAlert } from '@/store/alertSlice'
 
@@ -16,7 +16,7 @@ function PopupAddNewTeam({ handleClose }: { handleClose: Function }) {
 
   const [name, setName] = useState('')
 
-  const [nameError, setNameError] = useState(false)
+  const [nameError, setNameError] = useState({ error: false, text: [''] })
 
   const zodSchema = z.string().trim().min(1).max(40)
 
@@ -25,7 +25,11 @@ function PopupAddNewTeam({ handleClose }: { handleClose: Function }) {
       zodSchema.parse(name)
       return true
     } catch (err) {
-      setNameError(true)
+      if (err instanceof ZodError) {
+        const flattenError = err.flatten()
+
+        setNameError({ error: true, text: flattenError.formErrors })
+      }
       return false
     }
   }
@@ -77,14 +81,14 @@ function PopupAddNewTeam({ handleClose }: { handleClose: Function }) {
         </h1>
         <form className='form' onSubmit={handleSubmit}>
           <div className='team-name-group'>
-            <InputLabel htmlFor='team-name-field'>Name</InputLabel>
+            <InputLabel htmlFor='team-name-field'>Name <span className='warning-color'>*</span></InputLabel>
             <StyledInputField
               id='team-name-field'
               placeholder='team name'
-              onChange={(e) => { setName(e.target.value); setNameError(false) }}
-              required
-              error={nameError}
+              onChange={(e) => { setName(e.target.value); setNameError({ error: false, text: [''] }) }}
+              error={nameError.error}
             ></StyledInputField>
+            {nameError?.text.map((value, i) => <p key={i} className='field-error'>{value}</p>)}
           </div>
           <div className='button-row'>
             <AddButton type='submit'>ADD TEAM</AddButton>

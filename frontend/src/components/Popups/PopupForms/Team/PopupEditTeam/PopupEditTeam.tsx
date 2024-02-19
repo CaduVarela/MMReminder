@@ -11,16 +11,16 @@ import EditButton from '../../../../CustomMUI/Buttons/EditButtons/EditButton'
 import SaveIcon from '@mui/icons-material/Save';
 
 import { TeamType } from '@assets/types/BackendTypes'
-import { z } from 'zod'
+import { ZodError, z } from 'zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useDispatch } from 'react-redux'
 import { setAlert } from '@/store/alertSlice'
 
 function PopupEditTeam({ team, handleClose }: { team: TeamType, handleClose: Function }) {
 
-  const [name, setName] = useState('')
+  const [name, setName] = useState(team.name)
 
-  const [nameError, setNameError] = useState(false)
+  const [nameError, setNameError] = useState({ error: false, text: [''] })
 
   const zodSchema = z.string().trim().min(1).max(40)
 
@@ -29,10 +29,13 @@ function PopupEditTeam({ team, handleClose }: { team: TeamType, handleClose: Fun
       zodSchema.parse(name)
       return true
     } catch (err) {
-      setNameError(true)
+      if (err instanceof ZodError) {
+        const flattenError = err.flatten()
+
+        setNameError({ error: true, text: flattenError.formErrors })
+      }
       return false
     }
-
   }
 
   const dispatch = useDispatch()
@@ -84,13 +87,14 @@ function PopupEditTeam({ team, handleClose }: { team: TeamType, handleClose: Fun
         </p>
         <form className='form' onSubmit={handleSubmit}>
           <div className='team-name-group'>
-            <InputLabel htmlFor='team-name-field'>Team Name</InputLabel>
+            <InputLabel htmlFor='team-name-field'>Name <span className='warning-color'>*</span></InputLabel>
             <StyledInputField
               id='team-name-field'
-              required defaultValue={team.name}
+              defaultValue={team.name}
               onChange={(e) => setName(e.target.value)}
-              error={nameError}
+              error={nameError.error}
             ></StyledInputField>
+            {nameError?.text.map((value, i) => <p key={i} className='field-error'>{value}</p>)}
           </div>
           <div className='button-row'>
             <EditButton startIcon={<SaveIcon />} type='submit'>SAVE CHANGES</EditButton>

@@ -26,11 +26,11 @@ function PopupEditPerson({ person, handleClose }: { person: PersonType, handleCl
   const [email, setEmail] = useState(person.email)
   const [phone, setPhone] = useState(person.phone)
 
-  const [nameError, setNameError] = useState(false)
-  const [emailError, setEmailError] = useState(false)
-  const [phoneError, setPhoneError] = useState(false)
+  const [nameError, setNameError] = useState({ error: false, text: [''] })
+  const [emailError, setEmailError] = useState({ error: false, text: [''] })
+  const [phoneError, setPhoneError] = useState({ error: false, text: [''] })
 
-  const phoneSchema = z.string().min(11).refine(
+  const phoneSchema = z.string().refine(
     (value) => validator.isMobilePhone(value, 'pt-BR'),
     {
       message: "Invalid phone number"
@@ -53,22 +53,23 @@ function PopupEditPerson({ person, handleClose }: { person: PersonType, handleCl
       return true
     } catch (err: any) {
       if (err instanceof ZodError) {
-        const flatten = err.flatten()
+        const flattenError = err.flatten()
 
-        setNameError(false)
-        setEmailError(false)
-        setPhoneError(false)
+        setNameError({ error: false, text: [''] })
+        setEmailError({ error: false, text: [''] })
+        setPhoneError({ error: false, text: [''] })
 
-        Object.entries(flatten.fieldErrors).forEach((key) => {
+        Object.entries(flattenError.fieldErrors).forEach((key) => {
+          console.log(key)
           switch (key[0]) {
             case 'name':
-              setNameError(true)
+              setNameError({ error: true, text: key[1] as string[] })
               break;
             case 'email':
-              setEmailError(true)
+              setEmailError({ error: true, text: key[1] as string[] })
               break;
             case 'phone':
-              setPhoneError(true)
+              setPhoneError({ error: true, text: key[1] as string[] })
               break;
           }
         })
@@ -128,8 +129,8 @@ function PopupEditPerson({ person, handleClose }: { person: PersonType, handleCl
 
     if (phone && phone !== null && phone.length > 0)
       newPerson = { name, email, phone } as PersonType
-    else
-      newPerson = { name, email } as PersonType
+    else 
+      newPerson = { name, email, phone: '' } as PersonType
 
     personMutation.mutate()
 
@@ -146,38 +147,38 @@ function PopupEditPerson({ person, handleClose }: { person: PersonType, handleCl
           You are updating <span className='edit-color'>{person.name}</span>.
         </p>
         <form className='form' onSubmit={handleSubmit}>
-          <div className='person-name-group'>
-            <InputLabel htmlFor='person-name-field'>Person Name</InputLabel>
+          <div className='field-group person-name-group'>
+            <InputLabel htmlFor='person-name-field'>Name <span className='warning-color'>*</span></InputLabel>
             <StyledInputField
               id='person-name-field'
               placeholder='person name'
-              error={nameError}
-              required
+              error={nameError.error}
               defaultValue={person.name}
-              onChange={(e) => { setName(e.target.value) }}
+              onChange={(e) => { setName(e.target.value), setNameError({ error: false, text: [''] }) }}
             ></StyledInputField>
+            {nameError?.text.map((value, i) => <p key={i} className='field-error'>{value}</p>)}
           </div>
-          <div className='person-email-group'>
-            <InputLabel htmlFor='person-email-field'>Person Email</InputLabel>
+          <div className='field-group person-email-group'>
+            <InputLabel htmlFor='person-email-field'>Email <span className='warning-color'>*</span></InputLabel>
             <StyledInputField
               id='person-email-field'
               placeholder='person email'
-              type='email'
-              error={emailError}
-              required
+              error={emailError.error}
               defaultValue={person.email}
-              onChange={(e) => { setEmail(e.target.value) }}
+              onChange={(e) => { setEmail(e.target.value), setEmailError({ error: false, text: [''] }) }}
             ></StyledInputField>
+            {emailError?.text.map((value, i) => <p key={i} className='field-error'>{value}</p>)}
           </div>
-          <div className='person-phone-group'>
-            <InputLabel htmlFor='person-phone-field'>Person Phone</InputLabel>
+          <div className='field-group person-phone-group'>
+            <InputLabel htmlFor='person-phone-field'>Phone</InputLabel>
             <StyledInputField
               id='person-phone-field'
               placeholder='person phone'
-              error={phoneError}
+              error={phoneError.error}
               defaultValue={person.phone}
-              onChange={(e) => { setPhone(e.target.value) }}
+              onChange={(e) => { setPhone(e.target.value), setPhoneError({ error: false, text: [''] }) }}
             ></StyledInputField>
+            {phoneError?.text.map((value, i) => <p key={i} className='field-error'>{value}</p>)}
           </div>
           <div className='button-row'>
             <EditButton startIcon={<SaveIcon />} type='submit'>SAVE CHANGES</EditButton>

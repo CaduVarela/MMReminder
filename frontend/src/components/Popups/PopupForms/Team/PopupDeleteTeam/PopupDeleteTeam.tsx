@@ -48,7 +48,7 @@ function PopupDeleteTeam({ team, handleClose }: { team: TeamType, handleClose: F
     <PopupBox>
       <div className='content-wrapper'>
         <h1>Delete Team</h1>
-        <p>Are you sure you want to delete <span className='warning'>{team.name}</span>?</p>
+        <p>Are you sure you want to delete <span className='danger-color'>{team.name}</span>?</p>
         <form className='form' onSubmit={handleSubmit}>
           <div className='button-row'>
             <DeleteButton type='submit'>DELETE</DeleteButton>

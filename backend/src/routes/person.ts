@@ -24,7 +24,7 @@ const zodSchemaCreate = z.object({
         message: "Invalid phone number",
         path: ["phone"]
       }
-    ).optional(),
+    ).or(z.string().max(0)).optional(),
 
     $connect: z.object({
       teams: z.number().array().optional()
@@ -38,13 +38,17 @@ const zodSchemaUpdate = z.object({
     email: z.string().email().optional(),
 
     // Only accepts pt-BR phone numbers
-    phone: z.string().refine(
-      (value) => validator.isMobilePhone(value, 'pt-BR'),
-      {
-        message: "Invalid phone number",
-        path: ["phone"]
-      }
-    ).optional(),
+
+    phone: z.union([
+      z.string().max(0),
+      z.string().refine(
+        (value) => validator.isMobilePhone(value, 'pt-BR'),
+        {
+          message: "Invalid phone number",
+          path: ["phone"]
+        }
+      )
+    ]).optional(),
 
     $connect: z.object({
       teams: z.number().array().optional()

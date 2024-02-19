@@ -29,7 +29,8 @@ const StyledInputField = styled(InputBase)({
 })
 
 StyledInputField.defaultProps = {
-  autoComplete: "off"
+  autoComplete: "off",
+  required: false
 }
 
 export default StyledInputField

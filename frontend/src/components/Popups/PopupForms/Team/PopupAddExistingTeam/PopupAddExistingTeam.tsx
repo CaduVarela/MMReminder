@@ -81,6 +81,20 @@ function PopupAddExistingTeam({ person, handleClose }: { person: PersonType, han
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
+    let alreadyOnTeam = false
+    person.teams.map((value) => {
+      if (value.id === selectedTeam.id) {
+        dispatch(setAlert({
+          text: "Person is already on this team!",
+          severity: "warning",
+          autoHideDuration: 3000
+        }))
+        alreadyOnTeam = true
+      }
+    })
+
+    if (alreadyOnTeam) { return }
+
     teamMutation.mutate()
 
     handleClose()

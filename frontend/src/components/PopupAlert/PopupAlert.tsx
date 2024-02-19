@@ -32,27 +32,33 @@ function PopupAlert({
           root: ({ ownerState }) => ({
             ...(ownerState.severity === "error" &&
             {
-              backgroundColor: `${palette.errorColor}60`,
-              color: palette.darkColor,
+              backgroundColor: `${palette.lightColor}`,
+              borderColor: palette.errorColor,
+              color: palette.errorColor,
             }),
             ...(ownerState.severity === "warning" &&
             {
-              backgroundColor: `${palette.warningColor}60`,
-              color: palette.darkColor,
+              backgroundColor: `${palette.lightColor}`,
+              borderColor: palette.warningColor,
+              color: palette.warningColor,
             }),
             ...(ownerState.severity === "info" &&
             {
-              backgroundColor: `${palette.infoColor}60`,
-              color: palette.darkColor,
+              backgroundColor: `${palette.lightColor}`,
+              borderColor: palette.infoColor,
+              color: palette.infoColor,
             }),
             ...(ownerState.severity === "success" &&
             {
-              backgroundColor: `${palette.successColor}60`,
-              color: palette.darkColor,
+              backgroundColor: `${palette.lightColor}`,
+              borderColor: palette.successColor,
+              color: palette.successColor,
             }),
-            backdropFilter: 'blur(10px)'
+            borderWidth: 1,
+            borderStyle: 'solid',
+            backdropFilter: 'blur(50px)',
+            borderRadius: 5,
           }),
-
         },
       },
     }
@@ -70,8 +76,8 @@ function PopupAlert({
           autoHideDuration={autoHideDuration}
           onClose={handleClose}
           action={[
-            <IconButton>
-              <CloseIcon />
+            <IconButton style={{ color: palette.darkColor }}>
+              <CloseIcon style={{ color: palette.darkColor }}/>
             </IconButton>
           ]}
         >

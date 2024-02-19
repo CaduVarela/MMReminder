@@ -1,5 +1,10 @@
 .content-wrapper {
   .edit-color {
-    color: $themeColorAnalogous;
+    color: $warningColor;
   }
+  
+  .warning-color {
+    color: $warningColor;
+  }
+
 }
