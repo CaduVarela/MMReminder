@@ -140,9 +140,9 @@ function TeamPersonsTable({ team, filter = '' }: { team: TeamType, filter?: stri
         <Table size='small'>
           <TableHead sx={{ height: 48 }}>
             <TableRow >
-              <StyledHeadTableCell>Name</StyledHeadTableCell>
-              <StyledHeadTableCell>Email</StyledHeadTableCell>
-              <StyledHeadTableCell>Phone</StyledHeadTableCell>
+              <StyledHeadTableCell style={{ width: '28%' }}>Name</StyledHeadTableCell>
+              <StyledHeadTableCell style={{ width: '28%' }}>Email</StyledHeadTableCell>
+              <StyledHeadTableCell style={{ width: '28%' }}>Phone</StyledHeadTableCell>
               <StyledHeadTableCell style={{ width: '16%' }}>Options</StyledHeadTableCell>
             </TableRow>
           </TableHead>
