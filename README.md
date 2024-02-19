@@ -77,6 +77,9 @@ O projeto possui duas telas principais as quais podem ser acessadas a partir do 
 
 ![TeamsPage](./demo/TeamsPage.png)
 
+- Cadastro de times
+- Listagem de times e seus membros
+
 Nesta pagina serão listadados todos os times presentes no banco de dados. Também é possivel filtrar pelo nome do time, criar, editar ou deletar times.
 
 Para acessar as funcionalidades de cada time, basta clicar no cartão do time para abrir um menu de controle e também listar todas as pessoas presentes nele.
@@ -85,8 +88,11 @@ Para acessar as funcionalidades de cada time, basta clicar no cartão do time pa
 
 ![PersonsPage](./demo/PersonsPage.png)
 
-De maneira muito similiar, esta pagina possui todas as funcionalidades da pagina de time, porém desta vez serão listadas todas as pessoas e você podera gerenciar os times de cada pessoa.
+- Cadastro de pessoas
+- Listagem de pessoas e os times de que faz parte
+
+De maneira muito similiar, esta pagina possui todas as funcionalidades da pagina de time, porém desta vez serão listadas todas as pessoas e é possivel gerenciar os times de cada pessoa.
 
 ## Obrigado!
 
-Obrigado por vizitar meu projeto! :)
+Obrigado por visitar meu projeto!
