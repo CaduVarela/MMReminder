@@ -80,7 +80,7 @@ function PopupAddExistingPerson({ team, handleClose }: { team: TeamType, handleC
     team.persons.map((value) => {
       if (value.id === selectedPerson.id) {
         dispatch(setAlert({
-          text: "Person is already on the team!",
+          text: "This person is already on the team!",
           severity: "warning",
           autoHideDuration: 3000
         }))
