@@ -128,7 +128,7 @@ function PopupAddExistingPerson({ team, handleClose }: { team: TeamType, handleC
               </button>
             ))}
             {isLoading && <div className='full-center'> <StyledCircularProgress /> </div>}
-            {persons?.pagination.count < 1 && <div className='full-center'>No teams found</div>}
+            {persons?.pagination.count < 1 && <div className='full-center'>No persons found</div>}
           </div>
         </form>
         <div className='pagination'>
