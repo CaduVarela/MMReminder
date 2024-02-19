@@ -66,7 +66,7 @@ function PopupRemovePersonFromTeam(
     <PopupBox>
       <div className='content-wrapper'>
         <h1>Delete Person</h1>
-        <p>Are you sure you want to remove <span className='warning'>{person.name}</span> from <span className='warning'>{team.name}</span>?</p>
+        <p>Are you sure you want to remove <span className='danger-color'>{person.name}</span> from <span className='warning'>{team.name}</span>?</p>
         <form className='form' onSubmit={handleSubmit}>
           <div className='button-row'>
             <DeleteButton type='submit'>REMOVE</DeleteButton>

@@ -48,7 +48,7 @@ function PopupDeletePerson({ person, handleClose }: { person: PersonType, handle
     <PopupBox>
       <div className='content-wrapper'>
         <h1>Delete Person</h1>
-        <p>Are you sure you want to delete <span className='warning'>{person.name}</span>?</p>
+        <p>Are you sure you want to delete <span className='danger-color'>{person.name}</span>?</p>
         <form className='form' onSubmit={handleSubmit}>
           <div className='button-row'>
             <DeleteButton type='submit'>DELETE</DeleteButton>
