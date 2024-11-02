@@ -1,4 +1,4 @@
-@import "./../SiteHeader/SiteHeader.scss";
+@use "@/components/SiteMainComponents/SiteHeader/SiteHeader" as *;
 
 .site-body {
   margin-top: clamp($header-min-height, $header-height, $header-max-height);

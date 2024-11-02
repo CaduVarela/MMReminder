@@ -6,7 +6,8 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: '@import "./src/assets/styles/palette.scss";',
+        api: 'modern-compiler',
+        additionalData: '@use "@/assets/styles/palette.scss" as *;',
       },
     },
   },
